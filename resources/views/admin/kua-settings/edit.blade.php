@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Pengaturan Web</h2>
     </x-slot>
 
-    @php($activeTab = in_array(request('tab'), ['web', 'instansi', 'surat', 'kepala', 'notif'], true) ? request('tab') : 'web')
+    @php($activeTab = in_array(request('tab'), ['web', 'instansi', 'surat', 'notif'], true) ? request('tab') : 'web')
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -29,11 +29,6 @@
                             :class="tab === 'surat' ? 'border-teal-700 text-teal-700 dark:text-teal-400' : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:text-gray-500'"
                             class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold">
                         Surat
-                    </button>
-                    <button type="button" @click="tab = 'kepala'"
-                            :class="tab === 'kepala' ? 'border-teal-700 text-teal-700 dark:text-teal-400' : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:text-gray-500'"
-                            class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold">
-                        Kepala &amp; Tanda Tangan
                     </button>
                     <button type="button" @click="tab = 'notif'"
                             :class="tab === 'notif' ? 'border-teal-700 text-teal-700 dark:text-teal-400' : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:text-gray-500'"
@@ -347,10 +342,8 @@
                             </div>
                         </div>
                         <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-2">Kosongkan untuk memakai ukuran bawaan (Level 1 = 17, Level 2 = 13, Level 3 = 11.5, Baris = 10.5 px).</p>
-                    </div>
 
-                    <div x-show="tab === 'kepala'" x-cloak>
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Kepala KUA (Penandatangan)</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-4">Kepala KUA (Penandatangan)</h3>
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div class="sm:col-span-2">
                                 <x-input-label for="kepala_nama" value="Nama Kepala KUA" />
