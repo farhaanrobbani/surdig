@@ -39,6 +39,14 @@
                     </div>
 
                     <div class="mt-4">
+                        <x-input-label for="permohonan_judul" value="Judul Surat Permohonan" />
+                        <x-text-input id="permohonan_judul" name="permohonan_judul" class="mt-1 block w-full" required
+                                      value="{{ old('permohonan_judul') }}" placeholder="Contoh: Surat Keterangan Domisili" />
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Judul yang dicetak di bagian atas PDF Surat Permohonan untuk jenis surat ini.</p>
+                        <x-input-error :messages="$errors->get('permohonan_judul')" class="mt-2" />
+                    </div>
+
+                    <div class="mt-4">
                         <x-input-label for="description" value="Deskripsi" />
                         <textarea id="description" name="description" rows="2"
                                   class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('description') }}</textarea>

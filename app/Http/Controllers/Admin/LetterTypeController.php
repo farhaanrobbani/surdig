@@ -78,6 +78,7 @@ class LetterTypeController extends Controller
         $data = $request->validate([
             'code' => ['required', 'string', 'max:50', Rule::unique('letter_types', 'code')->ignore($letterType)],
             'name' => ['required', 'string', 'max:150'],
+            'permohonan_judul' => ['required', 'string', 'max:200'],
             'description' => ['nullable', 'string', 'max:1000'],
             'permohonan_body' => ['nullable', 'string'],
             'permohonan_informasi' => ['nullable', 'string', 'max:2000'],

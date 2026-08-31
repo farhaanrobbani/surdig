@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>Surat Permohonan {{ $submission->letterType->name }}</title>
+    <title>Surat Permohonan {{ $submission->letterType->permohonan_judul ?? $submission->letterType->name }}</title>
     <style>
         @page { margin: 2cm 2.5cm 2.5cm 3cm; }
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-    <div class="judul">{{ strtoupper($submission->letterType->name) }}</div>
+    <div class="judul">{{ strtoupper($submission->letterType->permohonan_judul ?? $submission->letterType->name) }}</div>
 
     <div class="isi">
         <p>Yang bertanda tangan di bawah ini, saya:</p>
