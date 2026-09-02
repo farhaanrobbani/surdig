@@ -20,7 +20,7 @@
                         <span class="inline-block rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-900/50 dark:text-teal-300">
                             {{ $user->role }}
                         </span>
-                        <dl class="mt-3 grid grid-cols-1 gap-y-1.5 text-xs text-gray-600 dark:text-gray-400">
+                        <dl class="mt-3 grid grid-cols-1 gap-y-1.5 text-xs text-gray-600 dark:text-gray-400 sm:max-w-md">
                             <div class="flex gap-2">
                                 <dt class="w-16 shrink-0 font-semibold text-gray-500 dark:text-gray-400">NIP</dt>
                                 <dd class="min-w-0">{{ $user->nip ?: '—' }}</dd>
