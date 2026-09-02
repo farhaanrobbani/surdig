@@ -12,9 +12,9 @@
             <div class="mb-6 flex items-center gap-3">
                 @if ($user->fotoUrl())
                     <img src="{{ $user->fotoUrl() }}" alt="Foto profil"
-                         class="h-9 w-9 sm:h-10 sm:w-10 md:h-[3.5rem] md:w-[3.5rem] shrink-0 rounded-full object-cover border-2 border-teal-100 dark:border-teal-800" />
+                         class="h-9 w-9 sm:h-10 sm:w-10 md:h-[4rem] md:w-[4rem] shrink-0 rounded-full object-cover border-2 border-teal-100 dark:border-teal-800" />
                 @else
-                    <div class="h-9 w-9 sm:h-10 sm:w-10 md:h-[3.5rem] md:w-[3.5rem] shrink-0 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-sm sm:text-base md:text-lg font-bold text-teal-700 dark:text-teal-300">
+                    <div class="h-9 w-9 sm:h-10 sm:w-10 md:h-[4rem] md:w-[4rem] shrink-0 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-sm sm:text-base md:text-lg font-bold text-teal-700 dark:text-teal-300">
                         {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
                     </div>
                 @endif
