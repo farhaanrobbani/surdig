@@ -45,6 +45,25 @@
                     <div class="text-3xl font-bold {{ $stats['permohonan_baru'] ? 'text-blue-600' : 'text-gray-800 dark:text-gray-100' }} mt-1">{{ $stats['permohonan_baru'] }}</div>
                 </div>
             </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Total Pengumuman Nikah</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $statsNikah['total'] }}</div>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Akad Bulan Ini</div>
+                    <div class="text-3xl font-bold text-teal-600 mt-1">{{ $statsNikah['bulan_ini'] }}</div>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Akad Mendatang</div>
+                    <div class="text-3xl font-bold text-blue-600 mt-1">{{ $statsNikah['mendatang'] }}</div>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Akad Berlalu</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $statsNikah['berlalu'] }}</div>
+                </div>
+            </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">

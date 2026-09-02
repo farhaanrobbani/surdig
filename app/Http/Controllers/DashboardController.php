@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Letter;
 use App\Models\LetterType;
+use App\Models\MarriageAnnouncement;
 use App\Models\Submission;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,6 +20,14 @@ class DashboardController extends Controller
                 ->count(),
             'menunggu_persetujuan' => Letter::where('status', Letter::STATUS_DIAJUKAN)->count(),
             'permohonan_baru' => Submission::where('status', Submission::STATUS_BARU)->count(),
+        ];
+
+        $statsNikah = [
+            'total' => MarriageAnnouncement::count(),
+            'bulan_ini' => MarriageAnnouncement::whereBetween('tanggal_akad', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()])
+                ->count(),
+            'mendatang' => MarriageAnnouncement::whereDate('tanggal_akad', '>', today())->count(),
+            'berlalu' => MarriageAnnouncement::whereDate('tanggal_akad', '<', today())->count(),
         ];
 
         $counts = Letter::query()
@@ -40,6 +49,7 @@ class DashboardController extends Controller
         return view('dashboard', [
             'user' => $request->user(),
             'stats' => $stats,
+            'statsNikah' => $statsNikah,
             'perStatus' => $perStatus,
             'perJenis' => $perJenis,
             'suratTerbaru' => Letter::with('letterType')->latest()->take(5)->get(),
