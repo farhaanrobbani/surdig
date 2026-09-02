@@ -5,6 +5,18 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mb-6">
+                @php
+                    $hour = (int) now()->format('H');
+                    $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
+                @endphp
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    {{ $greeting }}, {{ $user->name }}
+                </h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Selamat datang di dashboard Surat Digital KUA. Berikut ringkasan aktivitas Anda hari ini.
+                </p>
+            </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <div class="flex flex-col items-center px-6 py-8 text-center">
