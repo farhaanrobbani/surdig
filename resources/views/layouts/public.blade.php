@@ -13,10 +13,10 @@
 
         @stack('head')
     </head>
-    <body class="bg-gradient-to-br from-teal-50 via-emerald-50 to-white text-[#1b1b18] font-sans antialiased">
+    <body class="min-h-screen flex flex-col bg-gradient-to-br from-teal-50 via-emerald-50 to-white text-[#1b1b18] font-sans antialiased">
         @include('partials.public-header')
 
-        <main>
+        <main class="flex-1">
             @yield('content')
         </main>
 
