@@ -9,23 +9,13 @@
                 $hour = (int) now()->format('H');
                 $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
             @endphp
-            <div class="mb-6 flex items-center gap-3">
-                @if ($user->fotoUrl())
-                    <img src="{{ $user->fotoUrl() }}" alt="Foto profil"
-                         class="h-9 w-9 sm:h-10 sm:w-10 md:h-[4rem] md:w-[4rem] shrink-0 rounded-full object-cover border-2 border-teal-100 dark:border-teal-800" />
-                @else
-                    <div class="h-9 w-9 sm:h-10 sm:w-10 md:h-[4rem] md:w-[4rem] shrink-0 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-sm sm:text-base md:text-lg font-bold text-teal-700 dark:text-teal-300">
-                        {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
-                    </div>
-                @endif
-                <div class="min-w-0">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 truncate">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 truncate">
                         {{ $greeting }}, {{ $user->name }}
                     </h2>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         Selamat datang di dashboard Surat Digital KUA. Berikut ringkasan aktivitas Anda hari ini.
                     </p>
-                </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
