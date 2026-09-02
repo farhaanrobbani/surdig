@@ -56,8 +56,7 @@
                     </div>
                 @else
                     <div>
-                        <x-input-label value="Pegawai" />
-                        <div class="mt-1.5 text-sm font-medium text-gray-800 dark:text-gray-100">{{ $currentUser->name }}</div>
+                        <x-input-label value="{{ $currentUser->name }}" />
                     </div>
                 @endif
                 <x-primary-button>Tampilkan</x-primary-button>
