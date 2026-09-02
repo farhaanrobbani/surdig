@@ -116,6 +116,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group(function () {
     Route::resource('letter-types', LetterTypeController::class)->except('show');
+    Route::get('letter-types/{letterType}/clone', [LetterTypeController::class, 'clone'])->name('letter-types.clone');
     Route::resource('letter-templates', LetterTemplateController::class)->except('show');
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');

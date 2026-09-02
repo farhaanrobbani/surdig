@@ -1,7 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Jenis Surat</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
+            {{ $source ? 'Clone Jenis Surat: '.$source->name : 'Tambah Jenis Surat' }}
+        </h2>
     </x-slot>
+
+    @php($source = $source ?? null)
 
     @push('editor')
         @vite(['resources/js/editor.js'])
@@ -9,6 +13,11 @@
 
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+            @if ($source)
+                <div class="mb-4 bg-amber-50 border border-amber-200 text-amber-800 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-300 px-4 py-3 rounded-md text-sm">
+                    Menyalin dari <strong>{{ $source->name }}</strong> (kode asli: <code>{{ $source->code }}</code>). Isi kode &amp; nama baru lalu simpan.
+                </div>
+            @endif
             <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
                 @if ($errors->any())
                     <div class="mb-4 bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-300 px-4 py-3 rounded-md text-sm">
@@ -20,20 +29,20 @@
                         </ul>
                     </div>
                 @endif
-                <form method="POST" action="{{ route('letter-types.store') }}" x-data="fieldRepeater({{ json_encode(old('fields', [])) }}, {{ json_encode(old('permohonan_fields', [])) }})">
+                <form method="POST" action="{{ route('letter-types.store') }}" x-data="fieldRepeater({{ json_encode(old('fields', $source?->fields ?? [])) }}, {{ json_encode(old('permohonan_fields', $source?->permohonan_fields ?? [])) }})">
                     @csrf
 
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <x-input-label for="code" value="Kode (contoh: SKN, SKT, SKC)" />
                             <x-text-input id="code" name="code" class="mt-1 block w-full" required
-                                          value="{{ old('code') }}" placeholder="SKN" />
+                                          value="{{ old('code') }}" placeholder="{{ $source ? 'Isi kode baru (asli: '.$source->code.')' : 'SKN' }}" />
                             <x-input-error :messages="$errors->get('code')" class="mt-2" />
                         </div>
                         <div>
                             <x-input-label for="name" value="Nama Jenis Surat" />
                             <x-text-input id="name" name="name" class="mt-1 block w-full" required
-                                          value="{{ old('name') }}" placeholder="Surat Keterangan Nikah" />
+                                          value="{{ old('name', $source?->name) }}" placeholder="Surat Keterangan Nikah" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
                     </div>
@@ -41,7 +50,7 @@
                     <div class="mt-4">
                         <x-input-label for="permohonan_judul" value="Judul Surat Permohonan" />
                         <x-text-input id="permohonan_judul" name="permohonan_judul" class="mt-1 block w-full" required
-                                      value="{{ old('permohonan_judul') }}" placeholder="Contoh: Surat Keterangan Domisili" />
+                                      value="{{ old('permohonan_judul', $source?->permohonan_judul) }}" placeholder="Contoh: Surat Keterangan Domisili" />
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Judul yang dicetak di bagian atas PDF Surat Permohonan untuk jenis surat ini.</p>
                         <x-input-error :messages="$errors->get('permohonan_judul')" class="mt-2" />
                     </div>
@@ -49,7 +58,7 @@
                     <div class="mt-4">
                         <x-input-label for="description" value="Deskripsi" />
                         <textarea id="description" name="description" rows="2"
-                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('description') }}</textarea>
+                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('description', $source?->description) }}</textarea>
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
@@ -57,7 +66,7 @@
                         <x-input-label for="permohonan_body" value="Narasi Surat Permohonan" />
                         <textarea id="permohonan_body" name="permohonan_body" data-editor rows="4"
                                   data-upload-url="{{ route('announcements.gambar') }}"
-                                  class="block w-full">{{ old('permohonan_body') }}</textarea>
+                                  class="block w-full">{{ old('permohonan_body', $source?->permohonan_body) }}</textarea>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Isi kalimat permohonan untuk dicetak di Surat Permohonan (arsip). Gunakan placeholder <code>[nama_field]</code> dari field di atas; tersedia juga <code>[nama_pemohon]</code> dan <code>[kontak]</code>. Kalimat pembuka "Yang bertanda tangan di bawah ini, saya:" otomatis tampil di atas tabel identitas, tidak perlu ditulis ulang di sini.</p>
                         <x-input-error :messages="$errors->get('permohonan_body')" class="mt-2" />
                     </div>
@@ -65,7 +74,7 @@
                     <div class="mt-4">
                         <x-input-label for="permohonan_informasi" value="Informasi di Bawah Form Permohonan (Berkas yang Dibawa)" />
                         <textarea id="permohonan_informasi" name="permohonan_informasi" rows="4"
-                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('permohonan_informasi') }}</textarea>
+                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('permohonan_informasi', $source?->permohonan_informasi) }}</textarea>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Ditampilkan di bawah form permohonan di halaman publik untuk jenis surat ini. Baris baru menjadi baris baru. Contoh: daftar berkas yang harus dibawa ke KUA. Kosongkan untuk menyembunyikan.</p>
                         <x-input-error :messages="$errors->get('permohonan_informasi')" class="mt-2" />
                     </div>
@@ -156,7 +165,7 @@
 
                     <div class="mt-6">
                         <label class="flex items-center">
-                            <input type="checkbox" name="publik" value="1" {{ old('publik') ? 'checked' : '' }} class="rounded border-gray-300">
+                            <input type="checkbox" name="publik" value="1" {{ (old('publik', $source?->publik) ? 'checked' : '') }} class="rounded border-gray-300">
                             <span class="ms-2 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Tampil di permohonan publik</span>
                         </label>
                     </div>
@@ -167,7 +176,7 @@
                         <div>
                             <label class="flex items-start gap-2">
                                 <input type="checkbox" name="kop_footer_enabled" value="1"
-                                       @checked((bool) old('kop_footer_enabled'))
+                                       @checked((bool) old('kop_footer_enabled', $source?->kop_footer_enabled))
                                        class="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500" />
                                 <span class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Tampilkan footer di bagian bawah surat</span>
                             </label>
@@ -177,7 +186,7 @@
                             <x-input-label for="kop_footer" value="Isi Teks Footer Surat" />
                             <textarea id="kop_footer" name="kop_footer" rows="3"
                                       class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"
-                                      placeholder="Contoh: Surat ini diterbitkan secara elektronik melalui sistem surat digital KUA.">{{ old('kop_footer') }}</textarea>
+                                      placeholder="Contoh: Surat ini diterbitkan secara elektronik melalui sistem surat digital KUA.">{{ old('kop_footer', $source?->kop_footer) }}</textarea>
                             <x-input-error :messages="$errors->get('kop_footer')" class="mt-2" />
                         </div>
                     </div>

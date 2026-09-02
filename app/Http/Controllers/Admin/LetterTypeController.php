@@ -25,6 +25,11 @@ class LetterTypeController extends Controller
         return view('admin.letter-types.create');
     }
 
+    public function clone(LetterType $letterType): View
+    {
+        return view('admin.letter-types.create', ['source' => $letterType]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validateData($request);

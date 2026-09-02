@@ -56,6 +56,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm space-x-2">
                                     <a href="{{ route('letter-types.edit', $type) }}" class="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
+                                    <a href="{{ route('letter-types.clone', $type) }}" class="text-amber-600 dark:text-amber-400 hover:underline">Clone</a>
                                     <form action="{{ route('letter-types.destroy', $type) }}" method="POST" class="inline"
                                           onsubmit="return confirm('Hapus jenis surat ini?')">
                                         @csrf
