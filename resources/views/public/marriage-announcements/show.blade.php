@@ -23,10 +23,6 @@
 
 @section('content')
     <section class="mx-auto max-w-3xl px-6 pb-16 pt-12">
-        <nav class="text-sm text-teal-700">
-            <a href="{{ route('pengumuman-nikah.index') }}" class="hover:underline">← Daftar Pengumuman Kehendak Nikah</a>
-        </nav>
-
         <div class="mt-6">
             <h1 class="text-center text-2xl font-bold">Pengumuman Kehendak Nikah</h1>
             <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-[#1b1b1870]">
@@ -34,7 +30,11 @@
             </p>
         </div>
 
-        <div class="mt-6 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
+        <div class="mt-6">
+            <a href="{{ route('pengumuman-nikah.index') }}" class="text-sm text-teal-700 hover:underline">← Kembali ke Daftar Pengumuman</a>
+        </div>
+
+        <div class="mt-4 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-teal-100 bg-teal-50/60 px-5 py-3">
                 <p class="text-center text-xs font-semibold uppercase tracking-wide text-teal-800">
                     KUA {{ kua_setting('kecamatan', '') }}{{ kua_setting('kabupaten') ? ', '.kua_setting('kabupaten') : '' }}
@@ -113,10 +113,5 @@
                 <span x-text="copied ? 'Tersalin!' : 'Bagikan'"></span>
             </button>
         </div>
-
-        <a href="{{ route('pengumuman-nikah.index') }}"
-           class="mt-10 inline-block rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-600">
-            &larr; Kembali ke Daftar Pengumuman
-        </a>
     </section>
 @endsection
