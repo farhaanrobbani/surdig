@@ -82,13 +82,13 @@
 
         <div class="mt-6 flex flex-wrap items-center gap-2">
             <span class="text-sm font-medium text-[#1b1b1870]">Bagikan:</span>
-            <a href="https://wa.me/?text={{ urlencode($shareText.' '.$shareUrl) }}" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/?text={{ urlencode($shareText.' '.$shareUrl) }}" rel="noopener noreferrer"
                class="inline-flex items-center gap-1.5 rounded-md border border-teal-100 bg-white px-3 py-1.5 text-sm font-medium text-teal-800 transition hover:bg-teal-50"
                aria-label="Bagikan ke WhatsApp">
                 @include('partials.sosmed-icon', ['platform' => 'whatsapp', 'class' => 'h-4 w-4'])
                 WhatsApp
             </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank" rel="noopener noreferrer"
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" rel="noopener noreferrer"
                class="inline-flex items-center gap-1.5 rounded-md border border-teal-100 bg-white px-3 py-1.5 text-sm font-medium text-teal-800 transition hover:bg-teal-50"
                aria-label="Bagikan ke Facebook">
                 @include('partials.sosmed-icon', ['platform' => 'facebook', 'class' => 'h-4 w-4'])
