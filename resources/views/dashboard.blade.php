@@ -17,67 +17,24 @@
                     Selamat datang di dashboard Surat Digital KUA. Berikut ringkasan aktivitas Anda hari ini.
                 </p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <div class="flex flex-col items-center px-6 py-8 text-center">
-                        @if ($user->fotoUrl())
-                            <img src="{{ $user->fotoUrl() }}" alt="Foto profil"
-                                 class="h-24 w-24 rounded-full object-cover border-4 border-teal-100 dark:border-teal-800" />
-                        @else
-                            <div class="h-24 w-24 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-3xl font-bold text-teal-700 dark:text-teal-300">
-                                {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
-                            </div>
-                        @endif
-                        <h3 class="mt-4 text-lg font-semibold text-gray-800 dark:text-gray-100">{{ $user->name }}</h3>
-                        <span class="mt-1 rounded-full bg-teal-100 px-3 py-0.5 text-xs font-semibold uppercase tracking-wide text-teal-700 dark:bg-teal-900/50 dark:text-teal-300">
-                            {{ $user->role }}
-                        </span>
-
-                        <dl class="mt-6 w-full divide-y divide-gray-100 dark:divide-gray-700 border-t border-gray-100 dark:border-gray-700">
-                            <div class="flex items-center justify-between gap-3 py-2.5 text-sm">
-                                <dt class="text-gray-500 dark:text-gray-400">NIP</dt>
-                                <dd class="font-medium text-gray-800 dark:text-gray-100 text-right">{{ $user->nip ?: '—' }}</dd>
-                            </div>
-                            <div class="flex items-center justify-between gap-3 py-2.5 text-sm">
-                                <dt class="text-gray-500 dark:text-gray-400">Jabatan</dt>
-                                <dd class="font-medium text-gray-800 dark:text-gray-100 text-right">{{ $user->jabatan ?: '—' }}</dd>
-                            </div>
-                            <div class="flex items-center justify-between gap-3 py-2.5 text-sm">
-                                <dt class="text-gray-500 dark:text-gray-400">Pangkat</dt>
-                                <dd class="font-medium text-gray-800 dark:text-gray-100 text-right">{{ $user->pangkat ?: '—' }}</dd>
-                            </div>
-                            <div class="flex items-center justify-between gap-3 py-2.5 text-sm">
-                                <dt class="text-gray-500 dark:text-gray-400">Golongan</dt>
-                                <dd class="font-medium text-gray-800 dark:text-gray-100 text-right">{{ $user->ruang_golongan ?: '—' }}</dd>
-                            </div>
-                        </dl>
-
-                        <a href="{{ route('profile.edit') }}" class="mt-5 inline-flex items-center gap-1 rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-600">
-                            Kelola Profil →
-                        </a>
-                    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Total Surat</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $stats['total_surat'] }}</div>
                 </div>
-
-                <div class="lg:col-span-2">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Total Surat</div>
-                            <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $stats['total_surat'] }}</div>
-                        </div>
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Surat Terbit Bulan Ini</div>
-                            <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $stats['surat_bulan_ini'] }}</div>
-                        </div>
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Menunggu Persetujuan</div>
-                            <div class="text-3xl font-bold {{ $stats['menunggu_persetujuan'] ? 'text-yellow-600' : 'text-gray-800 dark:text-gray-100' }} mt-1">{{ $stats['menunggu_persetujuan'] }}</div>
-                        </div>
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
-                            <div class="text-sm text-gray-500 dark:text-gray-400">Permohonan Baru</div>
-                            <div class="text-3xl font-bold {{ $stats['permohonan_baru'] ? 'text-blue-600' : 'text-gray-800 dark:text-gray-100' }} mt-1">{{ $stats['permohonan_baru'] }}</div>
-                        </div>
-                    </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Surat Terbit Bulan Ini</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $stats['surat_bulan_ini'] }}</div>
                 </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Menunggu Persetujuan</div>
+                    <div class="text-3xl font-bold {{ $stats['menunggu_persetujuan'] ? 'text-yellow-600' : 'text-gray-800 dark:text-gray-100' }} mt-1">{{ $stats['menunggu_persetujuan'] }}</div>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Permohonan Baru</div>
+                    <div class="text-3xl font-bold {{ $stats['permohonan_baru'] ? 'text-blue-600' : 'text-gray-800 dark:text-gray-100' }} mt-1">{{ $stats['permohonan_baru'] }}</div>
+                </div>
+            </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
