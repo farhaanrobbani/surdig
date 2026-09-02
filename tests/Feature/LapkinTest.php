@@ -216,9 +216,7 @@ class LapkinTest extends TestCase
     public function test_staff_can_update_employee_data_in_profile(): void
     {
         $this->actingAs($this->staff)
-            ->patch(route('profile.update'), [
-                'name' => $this->staff->name,
-                'email' => $this->staff->email,
+            ->patch(route('profile.employee.update'), [
                 'nip' => '198001012000031001',
                 'jabatan' => 'Penghulu',
                 'pangkat' => 'Penata Muda',

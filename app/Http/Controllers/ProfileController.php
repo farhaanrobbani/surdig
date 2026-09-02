@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeeUpdateRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,6 +33,37 @@ class ProfileController extends Controller
         $user = $request->user();
         $user->fill($data);
 
+        $this->handleFoto($request, $user);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Update the user's employee data.
+     */
+    public function updateEmployee(EmployeeUpdateRequest $request): RedirectResponse
+    {
+        $data = $request->validated();
+        unset($data['foto_profil'], $data['foto_hapus']);
+
+        $user = $request->user();
+        $user->fill($data);
+
+        $this->handleFoto($request, $user);
+
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    private function handleFoto(Request $request, $user): void
+    {
         if ($request->hasFile('foto_profil')) {
             $this->deleteFoto($user);
 
@@ -41,14 +73,6 @@ class ProfileController extends Controller
 
             $user->foto_profil_url = null;
         }
-
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
-
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     private function deleteFoto($user): void
