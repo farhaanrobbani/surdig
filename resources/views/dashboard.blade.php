@@ -10,9 +10,10 @@
                 $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
             @endphp
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 truncate">
-                        {{ $greeting }}, {{ $user->name }}
-                    </h2>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    <span class="block sm:inline">{{ $greeting }},</span>
+                    <span class="block sm:inline">{{ $user->name }}</span>
+                </h2>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         Selamat datang di dashboard Surat Digital KUA. Berikut ringkasan aktivitas Anda hari ini.
                     </p>
