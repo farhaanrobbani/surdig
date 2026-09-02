@@ -54,6 +54,11 @@
                             @endforeach
                         </select>
                     </div>
+                @else
+                    <div>
+                        <x-input-label value="Pegawai" />
+                        <div class="mt-1.5 text-sm font-medium text-gray-800 dark:text-gray-100">{{ $currentUser->name }}</div>
+                    </div>
                 @endif
                 <x-primary-button>Tampilkan</x-primary-button>
             </form>
@@ -248,9 +253,7 @@
                         <thead class="bg-gray-50 dark:bg-gray-700/40">
                             <tr>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400 w-10">No</th>
-                                @if ($users->isNotEmpty())
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Pegawai</th>
-                                @endif
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Pegawai</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400 w-28">Tanggal</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Tema Kegiatan</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Rincian Uraian Pekerjaan</th>
@@ -262,9 +265,7 @@
                             @forelse ($activities as $activity)
                                 <tr x-data="{ confirm: false }">
                                     <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">{{ $loop->iteration }}</td>
-                                    @if ($users->isNotEmpty())
                                         <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ $activity->user->name }}</td>
-                                    @endif
                                     <td class="px-4 py-3 text-sm font-semibold text-teal-700 dark:text-teal-400 whitespace-nowrap">
                                         {{ tanggal_indonesia($activity->tanggal, 'd/m/Y') }}
                                     </td>
@@ -305,7 +306,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="{{ $users->isNotEmpty() ? 7 : 6 }}" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                                    <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                                         Belum ada log kegiatan tercatat untuk bulan ini. Klik
                                         <span class="font-medium">"+ Ambil Data dari Operator"</span> atau
                                         <span class="font-medium">"+ Buat Pekerjaan Baru"</span>.

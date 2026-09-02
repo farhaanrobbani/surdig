@@ -57,6 +57,7 @@ class StaffActivityController extends Controller
             'columns' => KuaActivityTheme::activeList(),
             'users' => $user->canManageContent() ? User::orderBy('name')->get() : collect(),
             'selectedUserId' => $user->canManageContent() ? $request->integer('user_id') : null,
+            'currentUser' => $user,
             'month' => $month,
             'year' => $year,
         ]);
