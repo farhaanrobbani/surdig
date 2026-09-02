@@ -9,12 +9,12 @@
                 $hour = (int) now()->format('H');
                 $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
             @endphp
-            <div class="mb-6 flex items-center gap-4">
+            <div class="mb-6 flex items-center gap-3">
                 @if ($user->fotoUrl())
                     <img src="{{ $user->fotoUrl() }}" alt="Foto profil"
-                         class="h-14 w-14 rounded-full object-cover border-2 border-teal-100 dark:border-teal-800" />
+                         class="h-10 w-10 rounded-full object-cover border-2 border-teal-100 dark:border-teal-800" />
                 @else
-                    <div class="h-14 w-14 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-xl font-bold text-teal-700 dark:text-teal-300">
+                    <div class="h-10 w-10 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-base font-bold text-teal-700 dark:text-teal-300">
                         {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
                     </div>
                 @endif
