@@ -60,7 +60,7 @@
                                     <td class="px-4 py-4 whitespace-nowrap">{{ tanggal_indonesia($item->tanggal_akad) }}</td>
                                     <td class="px-4 py-4">{{ $item->tempat_nikah ?: '—' }}</td>
                                     <td class="px-4 py-4 text-center whitespace-nowrap">
-                                        <a href="{{ route('pengumuman-nikah.show', $item) }}" target="_blank" rel="noopener noreferrer"
+                                        <a href="{{ route('pengumuman-nikah.show', $item) }}" rel="noopener noreferrer"
                                            class="inline-flex items-center justify-center rounded-md border border-teal-100 bg-white p-2 text-teal-700 transition hover:bg-teal-50"
                                            aria-label="Bagikan pengumuman {{ $item->namaLengkapPria().' & '.$item->namaLengkapWanita() }}">
                                             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
