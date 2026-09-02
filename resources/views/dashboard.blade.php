@@ -20,11 +20,23 @@
                         <span class="inline-block rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-900/50 dark:text-teal-300">
                             {{ $user->role }}
                         </span>
-                        <dl class="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-gray-600 dark:text-gray-400">
-                            <dt class="font-semibold">NIP</dt>     <dd>{{ $user->nip ?: '—' }}</dd>
-                            <dt class="font-semibold">Jabatan</dt>  <dd>{{ $user->jabatan ?: '—' }}</dd>
-                            <dt class="font-semibold">Pangkat</dt>  <dd>{{ $user->pangkat ?: '—' }}</dd>
-                            <dt class="font-semibold">Golongan</dt> <dd>{{ $user->ruang_golongan ?: '—' }}</dd>
+                        <dl class="mt-3 grid grid-cols-1 gap-y-1.5 text-xs text-gray-600 dark:text-gray-400 sm:max-w-md">
+                            <div class="flex gap-2">
+                                <dt class="w-16 shrink-0 font-semibold text-gray-500 dark:text-gray-400">NIP</dt>
+                                <dd class="min-w-0">{{ $user->nip ?: '—' }}</dd>
+                            </div>
+                            <div class="flex gap-2">
+                                <dt class="w-16 shrink-0 font-semibold text-gray-500 dark:text-gray-400">Jabatan</dt>
+                                <dd class="min-w-0">{{ $user->jabatan ?: '—' }}</dd>
+                            </div>
+                            <div class="flex gap-2">
+                                <dt class="w-16 shrink-0 font-semibold text-gray-500 dark:text-gray-400">Pangkat</dt>
+                                <dd class="min-w-0">{{ $user->pangkat ?: '—' }}</dd>
+                            </div>
+                            <div class="flex gap-2">
+                                <dt class="w-16 shrink-0 font-semibold text-gray-500 dark:text-gray-400">Golongan</dt>
+                                <dd class="min-w-0">{{ $user->ruang_golongan ?: '—' }}</dd>
+                            </div>
                         </dl>
                         <a href="{{ route('profile.edit') }}" class="mt-2 inline-block text-xs font-semibold text-teal-600 hover:underline dark:text-teal-400">Kelola Profil →</a>
                     </div>
