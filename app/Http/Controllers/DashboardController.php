@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Letter;
 use App\Models\LetterType;
 use App\Models\Submission;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $stats = [
             'total_surat' => Letter::count(),
@@ -37,6 +38,7 @@ class DashboardController extends Controller
         $perJenis = LetterType::withCount('letters')->orderBy('letters_count', 'desc')->take(5)->get();
 
         return view('dashboard', [
+            'user' => $request->user(),
             'stats' => $stats,
             'perStatus' => $perStatus,
             'perJenis' => $perJenis,

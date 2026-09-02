@@ -5,6 +5,31 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 mb-4">
+                <div class="flex items-center gap-5">
+                    @if ($user->fotoUrl())
+                        <img src="{{ $user->fotoUrl() }}" alt="Foto profil"
+                             class="h-16 w-16 rounded-full object-cover border-2 border-teal-100 dark:border-teal-800" />
+                    @else
+                        <div class="h-16 w-16 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-xl font-bold text-teal-700 dark:text-teal-300">
+                            {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
+                        </div>
+                    @endif
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 truncate">{{ $user->name }}</h3>
+                        <span class="inline-block rounded-full bg-teal-100 px-2 py-0.5 text-xs font-semibold text-teal-700 dark:bg-teal-900/50 dark:text-teal-300">
+                            {{ $user->role }}
+                        </span>
+                        <dl class="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-gray-600 dark:text-gray-400">
+                            <dt class="font-semibold">NIP</dt>     <dd>{{ $user->nip ?: '—' }}</dd>
+                            <dt class="font-semibold">Jabatan</dt>  <dd>{{ $user->jabatan ?: '—' }}</dd>
+                            <dt class="font-semibold">Pangkat</dt>  <dd>{{ $user->pangkat ?: '—' }}</dd>
+                            <dt class="font-semibold">Golongan</dt> <dd>{{ $user->ruang_golongan ?: '—' }}</dd>
+                        </dl>
+                        <a href="{{ route('profile.edit') }}" class="mt-2 inline-block text-xs font-semibold text-teal-600 hover:underline dark:text-teal-400">Kelola Profil →</a>
+                    </div>
+                </div>
+            </div>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Total Surat</div>
