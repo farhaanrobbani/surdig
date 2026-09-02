@@ -26,8 +26,8 @@ class DashboardController extends Controller
             'total' => MarriageAnnouncement::count(),
             'bulan_ini' => MarriageAnnouncement::whereBetween('tanggal_akad', [now()->startOfMonth()->toDateString(), now()->endOfMonth()->toDateString()])
                 ->count(),
-            'mendatang' => MarriageAnnouncement::whereDate('tanggal_akad', '>', today())->count(),
-            'berlalu' => MarriageAnnouncement::whereDate('tanggal_akad', '<', today())->count(),
+            'hari_ini' => MarriageAnnouncement::whereDate('tanggal_akad', today())->count(),
+            'besok' => MarriageAnnouncement::whereDate('tanggal_akad', today()->addDay())->count(),
         ];
 
         $counts = Letter::query()

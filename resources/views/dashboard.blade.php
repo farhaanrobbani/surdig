@@ -56,12 +56,12 @@
                     <div class="text-3xl font-bold text-teal-600 mt-1">{{ $statsNikah['bulan_ini'] }}</div>
                 </div>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
-                    <div class="text-sm text-gray-500 dark:text-gray-400">Akad Mendatang</div>
-                    <div class="text-3xl font-bold text-blue-600 mt-1">{{ $statsNikah['mendatang'] }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Akad Hari Ini</div>
+                    <div class="text-3xl font-bold text-teal-600 mt-1">{{ $statsNikah['hari_ini'] }}</div>
                 </div>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
-                    <div class="text-sm text-gray-500 dark:text-gray-400">Akad Berlalu</div>
-                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $statsNikah['berlalu'] }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Akad Besok</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $statsNikah['besok'] }}</div>
                 </div>
             </div>
             </div>
