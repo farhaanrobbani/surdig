@@ -15,7 +15,7 @@ composer install --no-dev --no-interaction --prefer-dist --no-progress
 php artisan migrate --force
 if [ -f package.json ]; then
   npm install --no-progress --ignore-scripts 2>/dev/null || true
-  npm run build 2>/dev/null || true
+  npm run build
 fi
 php artisan storage:link --force
 php artisan config:cache
