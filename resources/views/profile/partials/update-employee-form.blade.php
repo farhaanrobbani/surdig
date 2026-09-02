@@ -37,6 +37,36 @@
                 <x-text-input id="ruang_golongan" name="ruang_golongan" type="text" class="mt-1 block w-full" :value="old('ruang_golongan', $user->ruang_golongan)" />
                 <x-input-error class="mt-2" :messages="$errors->get('ruang_golongan')" />
             </div>
+
+            <div>
+                <x-input-label for="grade_tukin" :value="__('Grade Tukin')" />
+                <x-text-input id="grade_tukin" name="grade_tukin" type="number" min="0" max="30" class="mt-1 block w-full" :value="old('grade_tukin', $user->grade_tukin)" />
+                <x-input-error class="mt-2" :messages="$errors->get('grade_tukin')" />
+            </div>
+
+            <div>
+                <x-input-label for="jumlah_uang_makan_harian" :value="__('Uang Makan Harian (Rp)')" />
+                <x-text-input id="jumlah_uang_makan_harian" name="jumlah_uang_makan_harian" type="number" min="0" step="0.01" class="mt-1 block w-full" :value="old('jumlah_uang_makan_harian', $user->jumlah_uang_makan_harian)" />
+                <x-input-error class="mt-2" :messages="$errors->get('jumlah_uang_makan_harian')" />
+            </div>
+
+            <div>
+                <x-input-label for="jumlah_tukin_kotor" :value="__('Tukin Kotor (Rp)')" />
+                <x-text-input id="jumlah_tukin_kotor" name="jumlah_tukin_kotor" type="number" min="0" step="0.01" class="mt-1 block w-full" :value="old('jumlah_tukin_kotor', $user->jumlah_tukin_kotor)" />
+                <x-input-error class="mt-2" :messages="$errors->get('jumlah_tukin_kotor')" />
+            </div>
+
+            <div>
+                <x-input-label for="jumlah_tukin_bersih" :value="__('Tukin Bersih (Rp)')" />
+                <x-text-input id="jumlah_tukin_bersih" name="jumlah_tukin_bersih" type="number" min="0" step="0.01" class="mt-1 block w-full" :value="old('jumlah_tukin_bersih', $user->jumlah_tukin_bersih)" />
+                <x-input-error class="mt-2" :messages="$errors->get('jumlah_tukin_bersih')" />
+            </div>
+
+            <div>
+                <x-input-label for="gapok" :value="__('Gaji Pokok (Rp)')" />
+                <x-text-input id="gapok" name="gapok" type="number" min="0" step="0.01" class="mt-1 block w-full" :value="old('gapok', $user->gapok)" />
+                <x-input-error class="mt-2" :messages="$errors->get('gapok')" />
+            </div>
         </div>
 
         <div>
