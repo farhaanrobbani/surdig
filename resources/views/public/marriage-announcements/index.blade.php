@@ -36,6 +36,7 @@
                                 <th class="px-4 py-3 text-start font-semibold">Wali Nikah</th>
                                 <th class="px-4 py-3 text-start font-semibold">Tanggal Akad</th>
                                 <th class="px-4 py-3 text-start font-semibold">Tempat</th>
+                                <th class="px-4 py-3 text-center font-semibold">Bagikan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,6 +59,15 @@
                                     <td class="px-4 py-4">{{ $item->status_wali ?: '—' }}</td>
                                     <td class="px-4 py-4 whitespace-nowrap">{{ tanggal_indonesia($item->tanggal_akad) }}</td>
                                     <td class="px-4 py-4">{{ $item->tempat_nikah ?: '—' }}</td>
+                                    <td class="px-4 py-4 text-center whitespace-nowrap">
+                                        <a href="{{ route('pengumuman-nikah.show', $item) }}" target="_blank" rel="noopener noreferrer"
+                                           class="inline-flex items-center justify-center rounded-md border border-teal-100 bg-white p-2 text-teal-700 transition hover:bg-teal-50"
+                                           aria-label="Bagikan pengumuman {{ $item->namaLengkapPria().' & '.$item->namaLengkapWanita() }}">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                                            </svg>
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

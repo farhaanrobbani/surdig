@@ -18,6 +18,16 @@ class MarriageAnnouncementPublicController extends Controller
         ]);
     }
 
+    public function show(MarriageAnnouncement $announcement): View
+    {
+        abort_unless($announcement->active, 404);
+
+        return view('public.marriage-announcements.show', [
+            'announcement' => $announcement,
+            'page' => $this->page(),
+        ]);
+    }
+
     public function arsip(Request $request): View
     {
         $query = MarriageAnnouncement::query()->berlalu();
