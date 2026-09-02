@@ -5,17 +5,27 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="mb-6">
-                @php
-                    $hour = (int) now()->format('H');
-                    $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
-                @endphp
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                    {{ $greeting }}, {{ $user->name }}
-                </h2>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Selamat datang di dashboard Surat Digital KUA. Berikut ringkasan aktivitas Anda hari ini.
-                </p>
+            @php
+                $hour = (int) now()->format('H');
+                $greeting = $hour < 11 ? 'Selamat Pagi' : ($hour < 15 ? 'Selamat Siang' : ($hour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
+            @endphp
+            <div class="mb-6 flex items-center gap-4">
+                @if ($user->fotoUrl())
+                    <img src="{{ $user->fotoUrl() }}" alt="Foto profil"
+                         class="h-14 w-14 rounded-full object-cover border-2 border-teal-100 dark:border-teal-800" />
+                @else
+                    <div class="h-14 w-14 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-xl font-bold text-teal-700 dark:text-teal-300">
+                        {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
+                    </div>
+                @endif
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                        {{ $greeting }}, {{ $user->name }}
+                    </h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Selamat datang di dashboard Surat Digital KUA. Berikut ringkasan aktivitas Anda hari ini.
+                    </p>
+                </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
