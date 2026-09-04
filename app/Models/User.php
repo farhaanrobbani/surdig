@@ -30,9 +30,16 @@ class User extends Authenticatable
 
     public const ROLE_KEPALA = 'kepala';
 
+    public const ROLE_SUPERADMIN = 'superadmin';
+
     public function isKepala(): bool
     {
         return $this->role === self::ROLE_KEPALA;
+    }
+
+    public function isSuperadmin(): bool
+    {
+        return $this->role === self::ROLE_SUPERADMIN;
     }
 
     public function isOperator(): bool
@@ -47,7 +54,7 @@ class User extends Authenticatable
 
     public function canManageContent(): bool
     {
-        return $this->isOperator() || $this->isKepala();
+        return $this->isOperator() || $this->isSuperadmin();
     }
 
     public function isActive(): bool

@@ -26,14 +26,14 @@ class UserController extends Controller
 
         return view('admin.users.index', [
             'users' => $users,
-            'roles' => [User::ROLE_STAFF => 'Staf', User::ROLE_OPERATOR => 'Operator', User::ROLE_KEPALA => 'Kepala'],
+            'roles' => [User::ROLE_STAFF => 'Staf', User::ROLE_OPERATOR => 'Operator', User::ROLE_KEPALA => 'Kepala', User::ROLE_SUPERADMIN => 'Superadmin'],
         ]);
     }
 
     public function create(): View
     {
         return view('admin.users.create', [
-            'roles' => [User::ROLE_STAFF => 'Staf', User::ROLE_OPERATOR => 'Operator', User::ROLE_KEPALA => 'Kepala'],
+            'roles' => [User::ROLE_STAFF => 'Staf', User::ROLE_OPERATOR => 'Operator', User::ROLE_KEPALA => 'Kepala', User::ROLE_SUPERADMIN => 'Superadmin'],
         ]);
     }
 
@@ -69,7 +69,7 @@ class UserController extends Controller
     {
         return view('admin.users.edit', [
             'user' => $user,
-            'roles' => [User::ROLE_STAFF => 'Staf', User::ROLE_OPERATOR => 'Operator', User::ROLE_KEPALA => 'Kepala'],
+            'roles' => [User::ROLE_STAFF => 'Staf', User::ROLE_OPERATOR => 'Operator', User::ROLE_KEPALA => 'Kepala', User::ROLE_SUPERADMIN => 'Superadmin'],
         ]);
     }
 
@@ -133,7 +133,7 @@ class UserController extends Controller
         return $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user)],
-            'role' => ['required', Rule::in([User::ROLE_STAFF, User::ROLE_OPERATOR, User::ROLE_KEPALA])],
+            'role' => ['required', Rule::in([User::ROLE_STAFF, User::ROLE_OPERATOR, User::ROLE_KEPALA, User::ROLE_SUPERADMIN])],
             'password' => [$user ? 'nullable' : 'required', 'string', 'min:8', 'confirmed'],
             'is_active' => ['sometimes', 'boolean'],
             'nip' => ['nullable', 'string', 'max:50'],

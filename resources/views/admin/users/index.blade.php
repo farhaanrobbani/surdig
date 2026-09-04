@@ -59,7 +59,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">{{ $user->email }}</td>
                                 <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-xs rounded-full {{ $user->isKepala() ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' }}">
+                                    <span class="px-2 py-1 text-xs rounded-full {{ $user->isSuperadmin() ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' : ($user->isKepala() ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : ($user->isOperator() ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' : 'bg-gray-100 text-gray-700 dark:bg-gray-900/40 dark:text-gray-300')) }}">
                                         {{ $roles[$user->role] ?? $user->role }}
                                     </span>
                                 </td>

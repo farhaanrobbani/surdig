@@ -4,7 +4,7 @@ Aplikasi web untuk pembuatan surat digital di Kantor Urusan Agama (KUA) berbasis
 
 ## Fitur
 
-- **Autentikasi & role**: staf KUA (membuat surat), Operator KUA (mengelola konten & data master), dan Kepala KUA (persetujuan, tanda tangan, & pengelolaan user)
+- **Autentikasi & role**: staf KUA (membuat surat), Operator KUA (mengelola konten, data master, & persetujuan surat), Kepala KUA (mengelola surat, laporan kinerja, & kritik saran), dan Superadmin KUA (akses penuh ke semua fitur)
 - **Master data**: 11 jenis surat dengan field dinamis (SPN, SKU, SPC, SUP, SIN, SP, SPD, SPA, SPM, SKN, PNL), template surat, pengaturan KUA (kop, alamat, kepala KUA, penanda posisi TTD), halaman statis & menu navbar dinamis
 - **Modul surat**: alur `draft → diajukan → disetujui → terbit`, PDF berkop KUA, nomor surat diisi manual (contoh: `B.001/KUA.01.01.01/PW.01/01/2026`)
 - **Laporan kinerja pegawai (lapkin)**: pencatatan kegiatan harian, master data harian & tema pekerjaan, template kalimat, ekspor **PDF & Word** (laporan per pegawai dan rekap per bulan/tahun)
@@ -48,6 +48,7 @@ User awal (ubah via `.env` sebelum seed):
 | Staf | `staf@kua.local` | `password` |
 | Operator | `operator@kua.local` | `password` |
 | Kepala | `kepala@kua.local` | `password` |
+| Superadmin | `superadmin@kua.local` | `password` |
 
 ⚠️ Wajib mengganti password default setelah deploy pertama.
 

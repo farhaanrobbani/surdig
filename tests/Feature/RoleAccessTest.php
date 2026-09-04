@@ -17,6 +17,8 @@ class RoleAccessTest extends TestCase
 
     private User $staff;
 
+    private User $superadmin;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,6 +26,7 @@ class RoleAccessTest extends TestCase
         $this->kepala = User::factory()->create(['role' => User::ROLE_KEPALA]);
         $this->operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
         $this->staff = User::factory()->create(['role' => User::ROLE_STAFF]);
+        $this->superadmin = User::factory()->create(['role' => User::ROLE_SUPERADMIN]);
     }
 
     public static function staffAccessibleRoutes(): array
@@ -51,7 +54,7 @@ class RoleAccessTest extends TestCase
         ];
     }
 
-    public static function kepalaOnlyRoutes(): array
+    public static function superadminOnlyRoutes(): array
     {
         return [
             'navbar' => ['navbar.index'],
@@ -82,7 +85,7 @@ class RoleAccessTest extends TestCase
     public function test_operator_can_access_all_manageable_menus(): void
     {
         $menus = array_merge(self::staffAccessibleRoutes(), self::staffForbiddenRoutes());
-        $menus = array_diff_key($menus, self::kepalaOnlyRoutes());
+        $menus = array_diff_key($menus, self::superadminOnlyRoutes());
         unset($menus['akun']);
 
         foreach ($menus as $label => [$route]) {
@@ -92,39 +95,39 @@ class RoleAccessTest extends TestCase
         }
     }
 
-    public function test_operator_cannot_access_user_management(): void
+    public function test_operator_cannot_access_superadmin_only_menus(): void
     {
-        $this->actingAs($this->operator)
-            ->get(route('users.index'))
-            ->assertForbidden();
-    }
-
-    public function test_operator_cannot_access_kepala_only_menus(): void
-    {
-        foreach (self::kepalaOnlyRoutes() as $label => [$route]) {
+        foreach (self::superadminOnlyRoutes() as $label => [$route]) {
             $this->actingAs($this->operator)
                 ->get(route($route))
                 ->assertForbidden("Operator tidak boleh akses $label");
         }
     }
 
-    public function test_operator_cannot_approve_or_reject_letters(): void
+    public function test_operator_can_approve_letters(): void
     {
         $letter = Letter::factory()->create(['status' => Letter::STATUS_DIAJUKAN]);
 
         $this->actingAs($this->operator)
             ->post(route('letters.setujui', $letter))
-            ->assertForbidden();
+            ->assertRedirect();
     }
 
-    public function test_kepala_can_access_all_menus(): void
+    public function test_kepala_has_same_access_as_staff(): void
     {
-        $menus = array_merge(self::staffAccessibleRoutes(), self::staffForbiddenRoutes(), self::kepalaOnlyRoutes());
-
-        foreach ($menus as $label => [$route]) {
+        foreach (self::staffAccessibleRoutes() as $label => [$route]) {
             $this->actingAs($this->kepala)
                 ->get(route($route))
                 ->assertOk("Kepala harus dapat akses $label");
+        }
+    }
+
+    public function test_kepala_cannot_access_operator_menus(): void
+    {
+        foreach (self::staffForbiddenRoutes() as $label => [$route]) {
+            $this->actingAs($this->kepala)
+                ->get(route($route))
+                ->assertForbidden("Kepala tidak boleh akses $label");
         }
     }
 
@@ -133,6 +136,26 @@ class RoleAccessTest extends TestCase
         $letter = Letter::factory()->create(['status' => Letter::STATUS_DIAJUKAN]);
 
         $this->actingAs($this->kepala)
+            ->post(route('letters.setujui', $letter))
+            ->assertRedirect();
+    }
+
+    public function test_superadmin_can_access_all_menus(): void
+    {
+        $menus = array_merge(self::staffAccessibleRoutes(), self::staffForbiddenRoutes(), self::superadminOnlyRoutes());
+
+        foreach ($menus as $label => [$route]) {
+            $this->actingAs($this->superadmin)
+                ->get(route($route))
+                ->assertOk("Superadmin harus dapat akses $label");
+        }
+    }
+
+    public function test_superadmin_can_approve_letters(): void
+    {
+        $letter = Letter::factory()->create(['status' => Letter::STATUS_DIAJUKAN]);
+
+        $this->actingAs($this->superadmin)
             ->post(route('letters.setujui', $letter))
             ->assertRedirect();
     }
@@ -150,7 +173,7 @@ class RoleAccessTest extends TestCase
             ->assertSee('Kritik & Saran');
     }
 
-    public function test_sidebar_shows_all_menus_for_operator(): void
+    public function test_sidebar_shows_manageable_menus_for_operator(): void
     {
         $this->actingAs($this->operator)
             ->get(route('dashboard'))
@@ -162,6 +185,20 @@ class RoleAccessTest extends TestCase
             ->assertDontSee('Pengaturan Web')
             ->assertDontSee('Navbar')
             ->assertDontSee(route('pages.index'));
+    }
+
+    public function test_sidebar_shows_all_menus_for_superadmin(): void
+    {
+        $this->actingAs($this->superadmin)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Posts')
+            ->assertSee('Download Center')
+            ->assertSee('Daftar Staf')
+            ->assertSee('Jenis Surat')
+            ->assertSee('Pengaturan Web')
+            ->assertSee('Navbar')
+            ->assertSee(route('pages.index'));
     }
 
     public function test_admin_layout_has_mini_sidebar_toggle(): void

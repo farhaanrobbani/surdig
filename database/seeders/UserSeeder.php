@@ -28,6 +28,12 @@ class UserSeeder extends Seeder
                 'password' => env('KEPALA_PASSWORD') ?: 'password',
                 'role' => User::ROLE_KEPALA,
             ],
+            [
+                'name' => 'Superadmin KUA',
+                'email' => env('SUPERADMIN_EMAIL') ?: 'superadmin@kua.local',
+                'password' => env('SUPERADMIN_PASSWORD') ?: 'password',
+                'role' => User::ROLE_SUPERADMIN,
+            ],
         ];
 
         foreach ($users as $user) {

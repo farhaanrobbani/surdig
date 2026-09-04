@@ -82,9 +82,9 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 
     Route::resource('letters', LetterController::class);
     Route::post('letters/{letter}/ajukan', [LetterController::class, 'ajukan'])->name('letters.ajukan');
-    Route::post('letters/{letter}/setujui', [LetterController::class, 'setujui'])->name('letters.setujui')->middleware('role:kepala');
-    Route::get('letters/{letter}/reject', [LetterController::class, 'reject'])->name('letters.reject')->middleware('role:kepala');
-    Route::post('letters/{letter}/tolak', [LetterController::class, 'tolak'])->name('letters.tolak')->middleware('role:kepala');
+    Route::post('letters/{letter}/setujui', [LetterController::class, 'setujui'])->name('letters.setujui')->middleware('role:kepala,operator,superadmin');
+    Route::get('letters/{letter}/reject', [LetterController::class, 'reject'])->name('letters.reject')->middleware('role:kepala,operator,superadmin');
+    Route::post('letters/{letter}/tolak', [LetterController::class, 'tolak'])->name('letters.tolak')->middleware('role:kepala,operator,superadmin');
     Route::post('letters/{letter}/terbitkan', [LetterController::class, 'terbitkan'])->name('letters.terbitkan');
     Route::get('letters/{letter}/pdf', [LetterController::class, 'pdf'])->name('letters.pdf');
     Route::get('letters/{letter}/preview', [LetterController::class, 'preview'])->name('letters.preview');
@@ -114,7 +114,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::post('/lapkin/template-kalimat', [StaffTemplateController::class, 'store'])->name('kegiatan.templates.store');
 });
 
-Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group(function () {
+Route::middleware(['auth', 'verified', 'active', 'role:operator,superadmin'])->group(function () {
     Route::resource('letter-types', LetterTypeController::class)->except('show');
     Route::get('letter-types/{letterType}/clone', [LetterTypeController::class, 'clone'])->name('letter-types.clone');
     Route::resource('letter-templates', LetterTemplateController::class)->except('show');
@@ -139,7 +139,7 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::post('/lapkin/tema-pekerjaan/{kuaActivityTheme}/move', [KuaActivityThemeController::class, 'move'])->name('kua-themes.move');
 });
 
-Route::middleware(['auth', 'verified', 'active', 'role:kepala'])->group(function () {
+Route::middleware(['auth', 'verified', 'active', 'role:superadmin'])->group(function () {
     Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar.index');
     Route::get('/navbar/create', [NavbarController::class, 'create'])->name('navbar.create');
     Route::post('/navbar', [NavbarController::class, 'store'])->name('navbar.store');

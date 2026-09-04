@@ -85,7 +85,7 @@
                     <a href="{{ route('letters.edit', $letter) }}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
                 @endif
 
-                @if ($letter->status === \App\Models\Letter::STATUS_DIAJUKAN && auth()->user()->isKepala())
+                @if ($letter->status === \App\Models\Letter::STATUS_DIAJUKAN && (auth()->user()->isKepala() || auth()->user()->isOperator() || auth()->user()->isSuperadmin()))
                     <form method="POST" action="{{ route('letters.setujui', $letter) }}">
                         @csrf
                         <x-primary-button>Setujui</x-primary-button>

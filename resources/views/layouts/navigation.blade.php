@@ -132,7 +132,7 @@
                 <span class="nav-text">{{ __('Pengumuman Nikah') }}</span>
             </x-nav-link>
 
-            @if (Auth::user()->isKepala())
+            @if (Auth::user()->isSuperadmin())
                 <x-nav-link :href="route('pages.index')" :active="request()->routeIs('pages.*')">
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
@@ -148,7 +148,7 @@
                 <span class="nav-text">{{ __('Daftar Staf') }}</span>
             </x-nav-link>
 
-            @if (Auth::user()->isKepala())
+            @if (Auth::user()->isSuperadmin())
                 <x-nav-link :href="route('navbar.index')" :active="request()->routeIs('navbar.*')">
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -165,7 +165,7 @@
             <span class="nav-text">{{ __('Kritik & Saran') }}</span>
         </x-nav-link>
 
-        @if (Auth::user()->isKepala())
+        @if (Auth::user()->isSuperadmin())
             <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -174,7 +174,7 @@
             </x-nav-link>
         @endif
 
-        @if (Auth::user()->isKepala())
+        @if (Auth::user()->isSuperadmin())
             <!-- Pengaturan Web (menu utama) -->
             <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
