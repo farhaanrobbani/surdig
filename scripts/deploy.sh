@@ -13,6 +13,7 @@ cp /usr/share/fonts/truetype/liberation/LiberationSans-*.ttf storage/fonts/ 2>/d
 chmod 755 /usr/share/fonts/truetype/liberation/*.ttf 2>/dev/null || true
 composer install --no-dev --no-interaction --prefer-dist --no-progress
 php artisan migrate --force
+php artisan db:seed --force
 if [ -f package.json ]; then
   npm install --no-progress --ignore-scripts 2>/dev/null || true
   npm run build
