@@ -4,7 +4,7 @@
     <div class="flex h-16 shrink-0 items-center border-b border-teal-600"
          :class="sidebarCollapsed ? 'justify-center px-2' : 'justify-between px-4'">
         <button type="button" @click="sidebarCollapsed = ! sidebarCollapsed; localStorage.setItem('sidebarCollapsed', sidebarCollapsed ? '1' : '0')"
-                class="shrink-0 rounded-md p-1.5 text-teal-200 transition hover:bg-teal-800/40 hover:text-white"
+                class="hidden shrink-0 rounded-md p-1.5 text-teal-200 transition hover:bg-teal-800/40 hover:text-white lg:block"
                 aria-label="Mini sidebar" title="Mini sidebar">
             <svg x-show="!sidebarCollapsed" class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
