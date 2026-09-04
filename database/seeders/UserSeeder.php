@@ -43,6 +43,8 @@ class UserSeeder extends Seeder
                     'name' => $user['name'],
                     'password' => $user['password'],
                     'role' => $user['role'],
+                    'email_verified_at' => now(),
+                    'is_active' => true,
                 ]
             );
         }
