@@ -42,7 +42,7 @@ class MarriageAnnouncementController extends Controller
 
     public function update(Request $request, MarriageAnnouncement $marriageAnnouncement): RedirectResponse
     {
-        $marriageAnnouncement->update($this->validated($request));
+        $marriageAnnouncement->update($this->validated($request, $marriageAnnouncement->id));
 
         return redirect()->route('marriage-announcements.index')
             ->with('success', 'Pengumuman kehendak nikah berhasil diperbarui.');
@@ -56,10 +56,14 @@ class MarriageAnnouncementController extends Controller
             ->with('success', 'Pengumuman kehendak nikah berhasil dihapus.');
     }
 
-    private function validated(Request $request): array
+    private function validated(Request $request, ?int $ignoreId = null): array
     {
+        $uniqueRule = $ignoreId
+            ? 'unique:marriage_announcements,no_pendaftaran,'.$ignoreId
+            : 'unique:marriage_announcements,no_pendaftaran';
+
         $data = $request->validate([
-            'no_pendaftaran' => ['nullable', 'string', 'max:80'],
+            'no_pendaftaran' => ['nullable', 'string', 'max:80', $uniqueRule],
             'nama_pria' => ['required', 'string', 'max:150'],
             'bin_pria' => ['nullable', 'string', 'max:120'],
             'alamat_pria' => ['nullable', 'string', 'max:255'],
