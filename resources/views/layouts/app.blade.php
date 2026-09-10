@@ -60,7 +60,7 @@
                 @endisset
 
                 <!-- Page Content -->
-                <main class="flex-1">
+                <main class="flex-1 animate-fade-up">
                     {{ $slot }}
                 </main>
             </div>

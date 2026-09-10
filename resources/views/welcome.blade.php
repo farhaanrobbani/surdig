@@ -14,7 +14,7 @@
     <body class="bg-gradient-to-br from-teal-50 via-emerald-50 to-white text-[#1b1b18] font-sans antialiased">
         @include('partials.public-header')
 
-        <main>
+        <main class="animate-fade-up">
             @php($hasBg = ! empty($kua['bg_url']))
             <section @if ($hasBg) style="background-image: url('{{ $kua['bg_url'] }}')" @endif
                      class="relative @if ($hasBg) bg-cover bg-center @else bg-gradient-to-br from-teal-50 via-emerald-50 to-white @endif">

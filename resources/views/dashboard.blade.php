@@ -19,45 +19,45 @@
                     </p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Total Surat</div>
-                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $stats['total_surat'] }}</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100" x-data="countUp({{ $stats['total_surat'] }})" x-text="display" x-cloak>0</div>
                 </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Surat Terbit Bulan Ini</div>
-                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $stats['surat_bulan_ini'] }}</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100" x-data="countUp({{ $stats['surat_bulan_ini'] }})" x-text="display" x-cloak>0</div>
                 </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Menunggu Persetujuan</div>
-                    <div class="text-3xl font-bold {{ $stats['menunggu_persetujuan'] ? 'text-yellow-600' : 'text-gray-800 dark:text-gray-100' }} mt-1">{{ $stats['menunggu_persetujuan'] }}</div>
+                    <div class="text-3xl font-bold {{ $stats['menunggu_persetujuan'] ? 'text-yellow-600' : 'text-gray-800 dark:text-gray-100' }} mt-1" x-data="countUp({{ $stats['menunggu_persetujuan'] }})" x-text="display" x-cloak>0</div>
                 </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Permohonan Baru</div>
-                    <div class="text-3xl font-bold {{ $stats['permohonan_baru'] ? 'text-blue-600' : 'text-gray-800 dark:text-gray-100' }} mt-1">{{ $stats['permohonan_baru'] }}</div>
+                    <div class="text-3xl font-bold {{ $stats['permohonan_baru'] ? 'text-blue-600' : 'text-gray-800 dark:text-gray-100' }} mt-1" x-data="countUp({{ $stats['permohonan_baru'] }})" x-text="display" x-cloak>0</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Total Pengumuman Nikah</div>
-                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $statsNikah['total'] }}</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100" x-data="countUp({{ $statsNikah['total'] }})" x-text="display" x-cloak>0</div>
                 </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Akad Bulan Ini</div>
-                    <div class="text-3xl font-bold text-teal-600 mt-1">{{ $statsNikah['bulan_ini'] }}</div>
+                    <div class="text-3xl font-bold text-teal-600 mt-1" x-data="countUp({{ $statsNikah['bulan_ini'] }})" x-text="display" x-cloak>0</div>
                 </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Akad Hari Ini</div>
-                    <div class="text-3xl font-bold text-teal-600 mt-1">{{ $statsNikah['hari_ini'] }}</div>
+                    <div class="text-3xl font-bold text-teal-600 mt-1" x-data="countUp({{ $statsNikah['hari_ini'] }})" x-text="display" x-cloak>0</div>
                 </div>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800 transition duration-200 hover:shadow-md hover:-translate-y-0.5">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Akad Besok</div>
-                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100">{{ $statsNikah['besok'] }}</div>
+                    <div class="text-3xl font-bold text-gray-800 mt-1 dark:text-gray-100" x-data="countUp({{ $statsNikah['besok'] }})" x-text="display" x-cloak>0</div>
                 </div>
             </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 stagger">
                 <div class="lg:col-span-1 bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 dark:bg-gray-800">
                     <h3 class="font-semibold text-gray-800 mb-4 dark:text-gray-100">Surat per Status</h3>
                     <ul class="space-y-2 text-sm">

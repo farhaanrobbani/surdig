@@ -37,7 +37,7 @@
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white border border-teal-100 shadow-sm overflow-hidden sm:rounded-lg dark:bg-gray-800 dark:border-teal-900">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white border border-teal-100 shadow-sm overflow-hidden sm:rounded-lg dark:bg-gray-800 dark:border-teal-900 animate-fade-up">
                 {{ $slot }}
             </div>
         </div>
