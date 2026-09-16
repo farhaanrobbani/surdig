@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Rules\Turnstile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -28,6 +29,9 @@ class PasswordResetLinkController extends Controller
     {
         $request->validate([
             'email' => ['required', 'email'],
+            'cf-turnstile-response' => $this->turnstileEnabled()
+                ? ['required', new Turnstile]
+                : ['nullable'],
         ]);
 
         // We will send the password reset link to this user. Once we have attempted
@@ -41,5 +45,10 @@ class PasswordResetLinkController extends Controller
                     ? back()->with('status', __($status))
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
+    }
+
+    private function turnstileEnabled(): bool
+    {
+        return (bool) config('services.turnstile.secret_key');
     }
 }

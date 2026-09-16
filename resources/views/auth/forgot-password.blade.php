@@ -16,10 +16,19 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        @if (config('services.turnstile.site_key'))
+            <div class="cf-turnstile mt-4" data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
+            <x-input-error :messages="$errors->get('cf-turnstile-response')" class="mt-2" />
+        @endif
+
         <div class="flex items-center justify-end mt-4">
             <x-primary-button>
                 {{ __('Email Password Reset Link') }}
             </x-primary-button>
         </div>
     </form>
+
+    @if (config('services.turnstile.site_key'))
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    @endif
 </x-guest-layout>
