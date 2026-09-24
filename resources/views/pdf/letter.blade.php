@@ -32,8 +32,8 @@
         .ttd .blok { display: inline-block; text-align: left; }
         .ttd .kota { margin-bottom: 0; }
         .ttd .anchor { font-size: 16px; font-weight: bold; margin: 6px 0; }
-        .ttd .nama { font-weight: bold; text-decoration: underline; }
-        .ttd .nip { font-size: 11px; line-height: 1; margin-top: 14px; }
+        .ttd .nama { font-weight: bold; text-decoration: underline; margin-top: 14px; }
+        .ttd .nip { font-size: 11px; line-height: 1; }
         .footer-surat { position: fixed; bottom: 1cm; left: 0; right: 0; padding-left: 0.8cm; padding-right: 0.8cm; text-align: left; font-size: 11px; line-height: 1.4; color: #111; }
     </style>
 </head>
