@@ -120,7 +120,9 @@
                 @else
                     <div style="height: 90px;"></div>
                 @endif
-                <div class="nama"><u>{{ $kepala['nama'] }}</u><br><span class="nip">NIP. {{ $kepala['nip'] }}</span></div>
+                @if (($pejabatPenilai['nama'] ?? '') !== '')
+                    <div class="nama"><u>{{ $pejabatPenilai['nama'] }}</u><br><span class="nip">NIP. {{ $pejabatPenilai['nip'] }}</span></div>
+                @endif
             </td>
             <td>
                 <div>Pegawai yang Dinilai</div>

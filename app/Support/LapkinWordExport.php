@@ -87,7 +87,10 @@ class LapkinWordExport
         $kiri = $ttd->addCell(4819, ['valign' => 'top']);
         $kiri->addText('Pejabat Penilai,', [], ['alignment' => Jc::LEFT]);
         self::addSignatureSpace($kiri);
-        self::addNameAndNip($kiri, $data['kepala']['nama'], $data['kepala']['nip']);
+        $penilai = $data['pejabatPenilai'];
+        if (($penilai['nama'] ?? '') !== '') {
+            self::addNameAndNip($kiri, $penilai['nama'], $penilai['nip']);
+        }
 
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
         $kanan->addText('Pegawai yang Dinilai,', [], ['alignment' => Jc::LEFT]);
@@ -163,7 +166,10 @@ class LapkinWordExport
         $kiri->addText('Mengetahui,', [], ['alignment' => Jc::LEFT]);
         $kiri->addText($data['kepalaJabatan'], ['bold' => true], ['alignment' => Jc::LEFT]);
         self::addSignatureSpace($kiri);
-        self::addNameAndNip($kiri, $data['kepala']['nama'], $data['kepala']['nip']);
+        $penilai = $data['pejabatPenilai'];
+        if (($penilai['nama'] ?? '') !== '') {
+            self::addNameAndNip($kiri, $penilai['nama'], $penilai['nip']);
+        }
 
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
         $kanan->addText($data['signatureDate'], [], ['alignment' => Jc::LEFT]);

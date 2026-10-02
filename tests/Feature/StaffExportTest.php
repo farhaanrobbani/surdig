@@ -250,13 +250,142 @@ class StaffExportTest extends TestCase
             ->assertSee('Tanggal Dicetak (opsional)');
     }
 
-    private function laporanWordDocument(array $extra): string
+    public function test_laporan_word_uses_kemenag_signer_for_kepala_subject(): void
     {
-        $response = $this->actingAs($this->staff)->get(route('kegiatan.export.laporan', array_merge([
+        KuaSetting::set('kepala_kemenag_nama', 'H. Kepala Kemenag');
+        KuaSetting::set('kepala_kemenag_nip', '196801011990031001');
+
+        $kepala = User::factory()->create([
+            'role' => User::ROLE_KEPALA,
+            'name' => 'Kepala KUA Lokal',
+        ]);
+
+        $xml = $this->laporanWordDocument(['format' => 'word'], $kepala);
+
+        $this->assertStringContainsString('H. Kepala Kemenag', $xml);
+        $this->assertStringContainsString('196801011990031001', $xml);
+        $this->assertStringNotContainsString('H. Kepala KUA', $xml);
+    }
+
+    public function test_laporan_word_keeps_kua_head_signer_for_staff_subject(): void
+    {
+        KuaSetting::set('kepala_kemenag_nama', 'H. Kepala Kemenag');
+        KuaSetting::set('kepala_kemenag_nip', '196801011990031001');
+
+        $xml = $this->laporanWordDocument(['format' => 'word']);
+
+        $this->assertStringContainsString('H. Kepala KUA', $xml);
+        $this->assertStringNotContainsString('H. Kepala Kemenag', $xml);
+    }
+
+    public function test_laporan_word_omits_signer_name_when_kemenag_empty_for_kepala(): void
+    {
+        KuaSetting::set('kepala_kemenag_nama', '');
+        KuaSetting::set('kepala_kemenag_nip', '');
+
+        $kepala = User::factory()->create([
+            'role' => User::ROLE_KEPALA,
+            'name' => 'Kepala KUA Lokal',
+        ]);
+
+        $xml = $this->laporanWordDocument(['format' => 'word'], $kepala);
+
+        $this->assertStringContainsString('Pejabat Penilai', $xml);
+        $this->assertStringNotContainsString('H. Kepala KUA', $xml);
+        $this->assertStringNotContainsString('197001011990011001', $xml);
+    }
+
+    public function test_rekap_word_uses_kemenag_signer_for_kepala_subject(): void
+    {
+        KuaSetting::set('kabupaten', 'Malang');
+        KuaSetting::set('kepala_kemenag_nama', 'H. Kepala Kemenag');
+        KuaSetting::set('kepala_kemenag_nip', '196801011990031001');
+
+        $kepala = User::factory()->create([
+            'role' => User::ROLE_KEPALA,
+            'name' => 'Kepala KUA Lokal',
+        ]);
+
+        $xml = $this->rekapWordDocument(['format' => 'word'], $kepala);
+
+        $this->assertStringContainsString('Kepala Kemenag Malang', $xml);
+        $this->assertStringContainsString('H. Kepala Kemenag', $xml);
+        $this->assertStringNotContainsString('Kepala KUA Ampelgading', $xml);
+        $this->assertStringNotContainsString('H. Kepala KUA', $xml);
+    }
+
+    public function test_rekap_word_keeps_kua_head_for_staff_subject(): void
+    {
+        KuaSetting::set('kabupaten', 'Malang');
+        KuaSetting::set('kepala_kemenag_nama', 'H. Kepala Kemenag');
+
+        $xml = $this->rekapWordDocument(['format' => 'word']);
+
+        $this->assertStringContainsString('Kepala KUA Ampelgading', $xml);
+        $this->assertStringContainsString('H. Kepala KUA', $xml);
+        $this->assertStringNotContainsString('Kepala Kemenag Malang', $xml);
+    }
+
+    public function test_pdf_templates_render_pejabat_penilai(): void
+    {
+        $kepala = User::factory()->create([
+            'role' => User::ROLE_KEPALA,
+            'name' => 'Kepala KUA Lokal',
+        ]);
+
+        $penilai = ['nama' => 'H. Kepala Kemenag', 'nip' => '196801011990031001'];
+
+        $laporan = view('pdf.laporan-kinerja', [
+            'user' => $kepala,
+            'activities' => collect(),
+            'pejabatPenilai' => $penilai,
+            'kop_anchor' => '1',
+            'printDate' => '31 Agustus 2026',
+        ])->render();
+
+        $this->assertStringContainsString('H. Kepala Kemenag', $laporan);
+        $this->assertStringNotContainsString('H. Kepala KUA', $laporan);
+
+        $rekap = view('pdf.rekap-laporan-kinerja', [
+            'user' => $kepala,
+            'monthName' => 'Agustus',
+            'year' => 2026,
+            'instansi' => 'KUA Ampelgading',
+            'totalHariKerja' => 22,
+            'signatureDate' => '31 Agustus 2026',
+            'pejabatPenilai' => $penilai,
+            'kepalaJabatan' => 'Kepala Kemenag Malang',
+            'kop_anchor' => '1',
+        ])->render();
+
+        $this->assertStringContainsString('Kepala Kemenag Malang', $rekap);
+        $this->assertStringContainsString('H. Kepala Kemenag', $rekap);
+        $this->assertStringNotContainsString('H. Kepala KUA', $rekap);
+    }
+
+    private function laporanWordDocument(array $extra, ?User $as = null): string
+    {
+        $response = $this->actingAs($as ?? $this->staff)->get(route('kegiatan.export.laporan', array_merge([
             'bulan' => 8,
             'tahun' => 2026,
         ], $extra)));
 
+        return $this->wordDocumentXml($response);
+    }
+
+    private function rekapWordDocument(array $extra, ?User $as = null): string
+    {
+        $response = $this->actingAs($as ?? $this->staff)->get(route('kegiatan.export.rekap', array_merge([
+            'bulan' => 8,
+            'tahun' => 2026,
+            'total_hari_kerja' => 22,
+        ], $extra)));
+
+        return $this->wordDocumentXml($response);
+    }
+
+    private function wordDocumentXml($response): string
+    {
         $response->assertOk();
 
         ob_start();

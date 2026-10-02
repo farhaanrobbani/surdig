@@ -366,6 +366,21 @@
                                 <x-text-input id="sk_kepala" name="sk_kepala" class="mt-1 block w-full"
                                               value="{{ old('sk_kepala', $settings['sk_kepala']['value']) }}" />
                             </div>
+                            <div class="sm:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-4">
+                                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                                    Penandatangan untuk laporan milik Kepala KUA (otomatis dipakai saat subjek laporan berrole kepala)
+                                </p>
+                                <x-input-label for="kepala_kemenag_nama" value="Nama Kepala Kemenag" />
+                                <x-text-input id="kepala_kemenag_nama" name="kepala_kemenag_nama" class="mt-1 block w-full"
+                                              value="{{ old('kepala_kemenag_nama', $settings['kepala_kemenag_nama']['value']) }}" />
+                                <x-input-error :messages="$errors->get('kepala_kemenag_nama')" class="mt-2" />
+                            </div>
+                            <div class="sm:col-span-2">
+                                <x-input-label for="kepala_kemenag_nip" value="NIP Kepala Kemenag" />
+                                <x-text-input id="kepala_kemenag_nip" name="kepala_kemenag_nip" class="mt-1 block w-full"
+                                              value="{{ old('kepala_kemenag_nip', $settings['kepala_kemenag_nip']['value']) }}" />
+                                <x-input-error :messages="$errors->get('kepala_kemenag_nip')" class="mt-2" />
+                            </div>
                         </div>
 
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-4">Tanda Tangan</h3>

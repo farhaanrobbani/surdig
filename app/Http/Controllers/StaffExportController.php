@@ -48,7 +48,7 @@ class StaffExportController extends Controller
                 ->get(),
             'monthName' => $this->monthName($month),
             'printDate' => $this->printDate($month, $year, $customTanggal),
-            'kepala' => $this->kepala(),
+            'pejabatPenilai' => $this->pejabatPenilai($user),
             'kop_anchor' => KuaSetting::get('kop_anchor', '1'),
             'fileName' => sprintf(
                 'Laporan_Kinerja_%s_%s_%s',
@@ -85,8 +85,10 @@ class StaffExportController extends Controller
             'kota' => KuaSetting::get('kabupaten', '') ?: '',
             'totalHariKerja' => $totalHariKerja,
             'signatureDate' => $this->signatureDate($month, $year, $customTanggal),
-            'kepala' => $this->kepala(),
-            'kepalaJabatan' => trim('Kepala KUA '.KuaSetting::get('kecamatan', '')),
+            'pejabatPenilai' => $this->pejabatPenilai($user),
+            'kepalaJabatan' => $user->isKepala()
+                ? trim('Kepala Kemenag '.(KuaSetting::get('kabupaten', '') ?: ''))
+                : trim('Kepala KUA '.KuaSetting::get('kecamatan', '')),
             'kop_anchor' => KuaSetting::get('kop_anchor', '1'),
             'fileName' => sprintf(
                 'Rekap_Laporan_Kinerja_%s_%s_%s',
@@ -166,5 +168,18 @@ class StaffExportController extends Controller
             'nip' => KuaSetting::get('kepala_nip', '') ?: '',
             'pangkat' => KuaSetting::get('kepala_pangkat', '') ?: '',
         ];
+    }
+
+    private function penandatanganKemenag(): array
+    {
+        return [
+            'nama' => KuaSetting::get('kepala_kemenag_nama', '') ?: '',
+            'nip' => KuaSetting::get('kepala_kemenag_nip', '') ?: '',
+        ];
+    }
+
+    private function pejabatPenilai(User $user): array
+    {
+        return $user->isKepala() ? $this->penandatanganKemenag() : $this->kepala();
     }
 }

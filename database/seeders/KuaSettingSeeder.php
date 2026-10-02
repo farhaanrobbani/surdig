@@ -21,6 +21,8 @@ class KuaSettingSeeder extends Seeder
             'kepala_nip' => '197001011990011001',
             'kepala_pangkat' => 'Pembina, IV/a',
             'sk_kepala' => '',
+            'kepala_kemenag_nama' => '',
+            'kepala_kemenag_nip' => '',
             'kop_anchor' => '1',
         ];
 
