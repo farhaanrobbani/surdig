@@ -122,9 +122,9 @@
                 <div>Mengetahui,</div>
                 <div style="font-weight: bold;">{{ $kepalaJabatan }}</div>
                 @if (($kop_anchor ?? '1') !== '0')
-                    <div style="height: 30px;"></div>
+                    <div style="height: 16px;"></div>
                     <div class="anchor">^</div>
-                    <div style="height: 7px;"></div>
+                    <div style="height: 21px;"></div>
                 @else
                     <div style="height: 78px;"></div>
                 @endif
