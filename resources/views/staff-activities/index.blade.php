@@ -83,8 +83,19 @@
                      picked: {},
                      importSearch: '',
                      importCategory: 'semua',
-                     item: { id: null, tanggal: '', key: '', kegiatan: '', pekerjaan: '', volume: '' },
-                     itemError: '',
+                      item: { id: null, tanggal: '', key: '', kegiatan: '', pekerjaan: '', volume: '' },
+                      itemError: '',
+
+                      selected: {},
+                      confirmBulk: false,
+                      selectedIds() { return Object.keys(this.selected).filter(id => this.selected[id]); },
+                      selectedCount() { return this.selectedIds().length; },
+                      allSelected() { return this.activityList.length > 0 && this.activityList.every(a => this.selected[a.id]); },
+                      toggleSelectAll() {
+                          const on = ! this.allSelected();
+                          this.activityList.forEach(a => this.selected[a.id] = on);
+                      },
+
 
                      initImport() {
                          const out = [];
@@ -258,6 +269,12 @@
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Rincian Uraian Pekerjaan</th>
                                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase dark:text-gray-400 w-28">Volume Berkas</th>
                                 <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase dark:text-gray-400 w-24">Aksi</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase dark:text-gray-400 w-12">
+                                    <input type="checkbox" :checked="allSelected()" @change="toggleSelectAll()"
+                                           :disabled="activityList.length === 0"
+                                           title="Pilih semua baris"
+                                           class="rounded border-gray-300 text-teal-600 dark:border-gray-600 dark:bg-gray-700 focus:ring-teal-500" />
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -302,10 +319,15 @@
                                             </div>
                                         </template>
                                     </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <input type="checkbox" x-model="selected[{{ $activity->id }}]"
+                                               title="Centang untuk hapus massal"
+                                               class="rounded border-gray-300 text-teal-600 dark:border-gray-600 dark:bg-gray-700 focus:ring-teal-500" />
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                                    <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                                         Belum ada log kegiatan tercatat untuk bulan ini. Klik
                                         <span class="font-medium">"+ Ambil Data dari Operator"</span> atau
                                         <span class="font-medium">"+ Buat Pekerjaan Baru"</span>.
@@ -315,6 +337,40 @@
                         </tbody>
                     </table>
                 </div>
+
+                <form method="POST" action="{{ route('kegiatan.bulk-destroy') }}"
+                      x-show="selectedCount() > 0" x-cloak
+                      class="flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-t border-gray-100 dark:border-gray-700">
+                    @csrf
+                    @method('DELETE')
+                    <template x-for="id in selectedIds()" :key="id">
+                        <input type="hidden" name="ids[]" :value="id" />
+                    </template>
+
+                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                        <strong class="text-gray-900 dark:text-gray-100" x-text="selectedCount()"></strong>
+                        kegiatan dipilih untuk dihapus.
+                    </p>
+
+                    <div class="flex items-center gap-3">
+                        <template x-if="! confirmBulk">
+                            <button type="button" @click="confirmBulk = true"
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                Hapus Terpilih
+                            </button>
+                        </template>
+                        <template x-if="confirmBulk">
+                            <div class="flex items-center gap-3 text-xs">
+                                <button type="submit"
+                                        class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                    Ya, Hapus (<span x-text="selectedCount()"></span>)
+                                </button>
+                                <button type="button" @click="confirmBulk = false"
+                                        class="text-gray-500 dark:text-gray-400 hover:underline">Batal</button>
+                            </div>
+                        </template>
+                    </div>
+                </form>
 
                 <form method="POST" action="{{ route('kegiatan.store') }}">
                     @csrf

@@ -141,6 +141,62 @@ class LapkinTest extends TestCase
         $this->assertDatabaseHas('staff_activities', ['kegiatan' => 'Kegiatan massal 60']);
     }
 
+    public function test_staff_can_bulk_delete_selected_activities(): void
+    {
+        $ids = [];
+        foreach (['Kegiatan A', 'Kegiatan B', 'Kegiatan C'] as $kegiatan) {
+            $ids[] = StaffActivity::create([
+                'user_id' => $this->staff->id,
+                'tanggal' => '2026-08-03',
+                'kegiatan' => $kegiatan,
+                'pekerjaan' => 'Uraian',
+                'total_jumlah' => 1,
+            ])->id;
+        }
+
+        $this->actingAs($this->staff)
+            ->delete(route('kegiatan.bulk-destroy'), ['ids' => [$ids[0], $ids[2]]])
+            ->assertRedirect()
+            ->assertSessionHas('success', '2 kegiatan berhasil dihapus.');
+
+        $this->assertDatabaseCount('staff_activities', 1);
+        $this->assertDatabaseHas('staff_activities', ['id' => $ids[1], 'kegiatan' => 'Kegiatan B']);
+    }
+
+    public function test_staff_cannot_bulk_delete_other_users_activities(): void
+    {
+        $own = StaffActivity::create([
+            'user_id' => $this->staff->id,
+            'tanggal' => '2026-08-03',
+            'kegiatan' => 'Milik staf',
+            'pekerjaan' => 'Uraian',
+            'total_jumlah' => 1,
+        ]);
+        $other = StaffActivity::create([
+            'user_id' => $this->operator->id,
+            'tanggal' => '2026-08-03',
+            'kegiatan' => 'Milik operator lain',
+            'pekerjaan' => 'Uraian',
+            'total_jumlah' => 1,
+        ]);
+
+        $this->actingAs($this->staff)
+            ->delete(route('kegiatan.bulk-destroy'), ['ids' => [$own->id, $other->id]])
+            ->assertRedirect()
+            ->assertSessionHas('success', '1 kegiatan berhasil dihapus.');
+
+        $this->assertDatabaseMissing('staff_activities', ['id' => $own->id]);
+        $this->assertDatabaseHas('staff_activities', ['id' => $other->id]);
+    }
+
+    public function test_bulk_delete_requires_at_least_one_id(): void
+    {
+        $this->actingAs($this->staff)
+            ->delete(route('kegiatan.bulk-destroy'), ['ids' => []])
+            ->assertRedirect()
+            ->assertSessionHasErrors('ids');
+    }
+
     public function test_activity_total_auto_synced_from_kua_daily_data(): void
     {
         KuaDailyData::create([

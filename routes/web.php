@@ -104,6 +104,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 
     Route::get('/lapkin/kegiatan', [StaffActivityController::class, 'index'])->name('kegiatan.index');
     Route::post('/lapkin/kegiatan', [StaffActivityController::class, 'store'])->name('kegiatan.store');
+    Route::delete('/lapkin/kegiatan/bulk', [StaffActivityController::class, 'destroyBulk'])->name('kegiatan.bulk-destroy');
     Route::get('/lapkin/kegiatan/{kegiatan}/edit', [StaffActivityController::class, 'edit'])->name('kegiatan.edit');
     Route::put('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'update'])->name('kegiatan.update');
     Route::delete('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'destroy'])->name('kegiatan.destroy');

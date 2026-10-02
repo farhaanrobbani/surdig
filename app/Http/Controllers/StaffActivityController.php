@@ -150,6 +150,24 @@ class StaffActivityController extends Controller
         return back()->with('success', 'Kegiatan berhasil dihapus.');
     }
 
+    public function destroyBulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer'],
+        ]);
+
+        $query = StaffActivity::whereIn('id', $data['ids']);
+
+        if (! $request->user()->canManageContent()) {
+            $query->where('user_id', $request->user()->id);
+        }
+
+        $count = $query->delete();
+
+        return back()->with('success', "{$count} kegiatan berhasil dihapus.");
+    }
+
     private function resolveTotal(array $item): int
     {
         $key = $item['activity_type_key'] ?? null;
