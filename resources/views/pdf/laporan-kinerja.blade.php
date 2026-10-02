@@ -127,7 +127,7 @@
             <td>
                 <div>Pegawai yang Dinilai</div>
                 @if (! empty($userTtdPath))
-                    <div style="height: 90px; text-align: center;"><img src="{{ $userTtdPath }}" style="max-height: 80px; max-width: 170px;"></div>
+                    <div style="height: 90px;"><img src="{{ $userTtdPath }}" style="max-height: 80px; max-width: 170px;"></div>
                 @else
                     <div style="height: 90px;"></div>
                 @endif

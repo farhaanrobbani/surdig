@@ -136,7 +136,7 @@
                 <div>{{ $signatureDate }}</div>
                 <div style="font-weight: bold;">Pegawai</div>
                 @if (! empty($userTtdPath))
-                    <div style="height: 78px; text-align: center;"><img src="{{ $userTtdPath }}" style="max-height: 68px; max-width: 150px;"></div>
+                    <div style="height: 78px;"><img src="{{ $userTtdPath }}" style="max-height: 68px; max-width: 150px;"></div>
                 @else
                     <div style="height: 78px;"></div>
                 @endif
