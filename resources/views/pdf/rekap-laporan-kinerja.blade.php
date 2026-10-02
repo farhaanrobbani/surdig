@@ -135,7 +135,11 @@
             <td class="kanan">
                 <div>{{ $signatureDate }}</div>
                 <div style="font-weight: bold;">Pegawai</div>
-                <div style="height: 78px;"></div>
+                @if (! empty($userTtdPath))
+                    <div style="height: 78px; text-align: center;"><img src="{{ $userTtdPath }}" style="max-height: 68px; max-width: 150px;"></div>
+                @else
+                    <div style="height: 78px;"></div>
+                @endif
                 <div class="nama"><u>{{ $user->name }}</u><br><span class="nip">NIP. {{ $user->nip }}</span></div>
             </td>
         </tr>

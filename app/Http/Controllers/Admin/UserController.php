@@ -58,6 +58,7 @@ class UserController extends Controller
             'gapok' => $data['gapok'] ?? 0,
             'jumlah_uang_makan_harian' => $data['jumlah_uang_makan_harian'] ?? 35150,
             'foto_profil_url' => $request->hasFile('foto_profil') ? $request->file('foto_profil')->store('users/photos', 'public') : null,
+            'ttd_url' => $request->hasFile('tanda_tangan') ? $request->file('tanda_tangan')->store('users/signatures', 'public') : null,
             'instansi' => $data['instansi'] ?? 'KUA Ampelgading',
         ]);
 
@@ -104,6 +105,14 @@ class UserController extends Controller
             $user->foto_profil_url = null;
         }
 
+        if ($request->hasFile('tanda_tangan')) {
+            $this->deleteTtd($user);
+            $user->ttd_url = $request->file('tanda_tangan')->store('users/signatures', 'public');
+        } elseif ($request->boolean('tanda_tangan_hapus')) {
+            $this->deleteTtd($user);
+            $user->ttd_url = null;
+        }
+
         if (! empty($data['password'])) {
             $user->password = $data['password'];
         }
@@ -121,6 +130,7 @@ class UserController extends Controller
         }
 
         $this->deleteFoto($user);
+        $this->deleteTtd($user);
 
         $user->delete();
 
@@ -148,6 +158,8 @@ class UserController extends Controller
             'instansi' => ['nullable', 'string', 'max:255'],
             'foto_profil' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:3072'],
             'foto_hapus' => ['sometimes', 'in:1'],
+            'tanda_tangan' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:3072'],
+            'tanda_tangan_hapus' => ['sometimes', 'in:1'],
         ]);
     }
 
@@ -155,6 +167,13 @@ class UserController extends Controller
     {
         if ($user->foto_profil_url && Storage::disk('public')->exists($user->foto_profil_url)) {
             Storage::disk('public')->delete($user->foto_profil_url);
+        }
+    }
+
+    private function deleteTtd(User $user): void
+    {
+        if ($user->ttd_url && Storage::disk('public')->exists($user->ttd_url)) {
+            Storage::disk('public')->delete($user->ttd_url);
         }
     }
 }

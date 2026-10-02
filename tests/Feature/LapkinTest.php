@@ -7,6 +7,8 @@ use App\Models\StaffActivity;
 use App\Models\User;
 use App\Models\UserActivityTemplate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class LapkinTest extends TestCase
@@ -323,6 +325,38 @@ class LapkinTest extends TestCase
             'jabatan' => 'Penghulu',
             'pangkat' => 'Penata Muda',
         ]);
+    }
+
+    public function test_staff_can_upload_signature_in_profile(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->staff)
+            ->patch(route('profile.employee.update'), [
+                'tanda_tangan' => UploadedFile::fake()->image('ttd.png', 200, 80),
+            ])
+            ->assertSessionHas('status', 'profile-updated');
+
+        $staff = $this->staff->refresh();
+        $this->assertNotNull($staff->ttd_url);
+        Storage::disk('public')->assertExists($staff->ttd_url);
+    }
+
+    public function test_staff_can_delete_signature_from_profile(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('ttd.png', 200, 80)->store('users/signatures', 'public');
+        $this->staff->update(['ttd_url' => $path]);
+
+        $this->actingAs($this->staff)
+            ->patch(route('profile.employee.update'), [
+                'tanda_tangan_hapus' => '1',
+            ])
+            ->assertSessionHas('status', 'profile-updated');
+
+        $this->assertNull($this->staff->fresh()->ttd_url);
+        Storage::disk('public')->assertMissing($path);
     }
 
     public function test_staff_can_manage_personal_template_sentences(): void

@@ -94,7 +94,7 @@ class LapkinWordExport
 
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
         $kanan->addText('Pegawai yang Dinilai,', [], ['alignment' => Jc::LEFT]);
-        self::addSignatureSpace($kanan);
+        self::addSignatureSpace($kanan, $data['userTtdPath'] ?? null);
         self::addNameAndNip($kanan, $user->name, $user->nip);
 
         return self::save($phpWord);
@@ -174,7 +174,7 @@ class LapkinWordExport
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
         $kanan->addText($data['signatureDate'], [], ['alignment' => Jc::LEFT]);
         $kanan->addText('Pegawai,', ['bold' => true], ['alignment' => Jc::LEFT]);
-        self::addSignatureSpace($kanan);
+        self::addSignatureSpace($kanan, $data['userTtdPath'] ?? null);
         self::addNameAndNip($kanan, $user->name, $user->nip);
 
         $section->addText('Catatan:', ['bold' => true], ['spaceBefore' => 300]);
@@ -280,8 +280,15 @@ class LapkinWordExport
         }
     }
 
-    private static function addSignatureSpace(Cell $cell): void
+    private static function addSignatureSpace(Cell $cell, ?string $imagePath = null): void
     {
+        if ($imagePath !== null && file_exists($imagePath)) {
+            $cell->addImage($imagePath, ['width' => 110]);
+            $cell->addTextRun()->addTextBreak();
+
+            return;
+        }
+
         $cell->addTextRun()->addTextBreak(4);
     }
 

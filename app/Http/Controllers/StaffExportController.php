@@ -49,6 +49,7 @@ class StaffExportController extends Controller
             'monthName' => $this->monthName($month),
             'printDate' => $this->printDate($month, $year, $customTanggal),
             'pejabatPenilai' => $this->pejabatPenilai($user),
+            'userTtdPath' => $user->ttdAbsolutePath(),
             'kop_anchor' => KuaSetting::get('kop_anchor', '1'),
             'fileName' => sprintf(
                 'Laporan_Kinerja_%s_%s_%s',
@@ -86,6 +87,7 @@ class StaffExportController extends Controller
             'totalHariKerja' => $totalHariKerja,
             'signatureDate' => $this->signatureDate($month, $year, $customTanggal),
             'pejabatPenilai' => $this->pejabatPenilai($user),
+            'userTtdPath' => $user->ttdAbsolutePath(),
             'kepalaJabatan' => $user->isKepala()
                 ? trim('Kepala Kemenag '.(KuaSetting::get('kabupaten', '') ?: ''))
                 : trim('Kepala KUA '.KuaSetting::get('kecamatan', '')),

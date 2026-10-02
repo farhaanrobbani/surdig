@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
     'name', 'email', 'email_verified_at', 'password', 'role', 'is_active',
     'nip', 'jabatan', 'level_jabatan', 'pangkat', 'ruang_golongan', 'grade_tukin',
     'jumlah_tukin_kotor', 'jumlah_tukin_bersih', 'gapok', 'jumlah_uang_makan_harian',
-    'foto_profil_url', 'instansi',
+    'foto_profil_url', 'ttd_url', 'instansi',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -79,6 +79,26 @@ class User extends Authenticatable
         }
 
         return Storage::disk('public')->url($this->foto_profil_url);
+    }
+
+    public function ttdUrl(): ?string
+    {
+        if (blank($this->ttd_url)) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->ttd_url);
+    }
+
+    public function ttdAbsolutePath(): ?string
+    {
+        if (blank($this->ttd_url)) {
+            return null;
+        }
+
+        $path = Storage::disk('public')->path($this->ttd_url);
+
+        return file_exists($path) ? $path : null;
     }
 
     /**

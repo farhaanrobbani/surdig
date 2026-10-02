@@ -24,6 +24,8 @@ class EmployeeUpdateRequest extends FormRequest
             'instansi' => ['nullable', 'string', 'max:255'],
             'foto_profil' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:3072'],
             'foto_hapus' => ['sometimes', 'in:1'],
+            'tanda_tangan' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:3072'],
+            'tanda_tangan_hapus' => ['sometimes', 'in:1'],
         ];
     }
 }

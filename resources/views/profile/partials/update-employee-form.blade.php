@@ -1,4 +1,4 @@
-<section x-data="{ preview: null }">
+<section x-data="{ preview: null, ttdPreview: null }">
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __('Data Pegawai') }}
@@ -101,6 +101,37 @@
                 @endif
             </div>
             <x-input-error class="mt-2" :messages="$errors->get('foto_profil')" />
+        </div>
+
+        <div>
+            <x-input-label for="tanda_tangan" :value="__('Tanda Tangan')" />
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {{ __('Gambar tanda tangan tampil di kolom Anda pada ekspor Laporan Kinerja (PDF/Word).') }}
+            </p>
+            <div class="mt-1 flex items-center gap-4">
+                <img x-show="ttdPreview"
+                     :src="ttdPreview"
+                     alt="Pratinjau tanda tangan"
+                     class="h-20 w-40 object-contain border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900" />
+                <img x-show="! ttdPreview && {{ $user->ttdUrl() ? 'true' : 'false' }}"
+                     src="{{ $user->ttdUrl() }}"
+                     alt="Tanda tangan"
+                     class="h-20 w-40 object-contain border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900" />
+                <label class="cursor-pointer">
+                    <input type="file" name="tanda_tangan" id="tanda_tangan" accept="image/jpeg,image/png,image/webp" class="sr-only"
+                           @change="const f = $event.target.files[0]; if (f) { const r = new FileReader(); r.onload = e => ttdPreview = e.target.result; r.readAsDataURL(f); }" />
+                    <span class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-500 hover:border-teal-500 hover:text-teal-700 dark:text-teal-400">
+                        {{ __('Pilih Gambar') }}
+                    </span>
+                </label>
+                @if ($user->ttdUrl())
+                    <label class="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
+                        <input type="checkbox" name="tanda_tangan_hapus" value="1" class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
+                        {{ __('Hapus tanda tangan') }}
+                    </label>
+                @endif
+            </div>
+            <x-input-error class="mt-2" :messages="$errors->get('tanda_tangan')" />
         </div>
 
         <div class="flex items-center gap-4">

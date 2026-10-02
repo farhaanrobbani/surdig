@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UserManagementTest extends TestCase
@@ -116,6 +118,28 @@ class UserManagementTest extends TestCase
         $this->assertSame('Nama Baru', $staff->name);
         $this->assertSame(User::ROLE_KEPALA, $staff->role);
         $this->assertTrue(password_verify('passwordlama', $staff->password));
+    }
+
+    public function test_superadmin_can_upload_user_signature(): void
+    {
+        Storage::fake('public');
+
+        $admin = User::factory()->role(User::ROLE_SUPERADMIN)->create();
+        $staff = User::factory()->create();
+
+        $this->actingAs($admin)
+            ->put(route('users.update', $staff), [
+                'name' => $staff->name,
+                'email' => $staff->email,
+                'role' => $staff->role,
+                'is_active' => '1',
+                'tanda_tangan' => UploadedFile::fake()->image('ttd.png', 200, 80),
+            ])
+            ->assertRedirect(route('users.index'));
+
+        $staff->refresh();
+        $this->assertNotNull($staff->ttd_url);
+        Storage::disk('public')->assertExists($staff->ttd_url);
     }
 
     public function test_kepala_can_reset_user_password(): void

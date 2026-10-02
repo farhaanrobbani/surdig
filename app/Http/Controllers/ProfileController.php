@@ -50,12 +50,13 @@ class ProfileController extends Controller
     public function updateEmployee(EmployeeUpdateRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        unset($data['foto_profil'], $data['foto_hapus']);
+        unset($data['foto_profil'], $data['foto_hapus'], $data['tanda_tangan'], $data['tanda_tangan_hapus']);
 
         $user = $request->user();
         $user->fill($data);
 
         $this->handleFoto($request, $user);
+        $this->handleTtd($request, $user);
 
         $user->save();
 
@@ -79,6 +80,26 @@ class ProfileController extends Controller
     {
         if ($user->foto_profil_url && Storage::disk('public')->exists($user->foto_profil_url)) {
             Storage::disk('public')->delete($user->foto_profil_url);
+        }
+    }
+
+    private function handleTtd(Request $request, $user): void
+    {
+        if ($request->hasFile('tanda_tangan')) {
+            $this->deleteTtd($user);
+
+            $user->ttd_url = $request->file('tanda_tangan')->store('users/signatures', 'public');
+        } elseif ($request->boolean('tanda_tangan_hapus')) {
+            $this->deleteTtd($user);
+
+            $user->ttd_url = null;
+        }
+    }
+
+    private function deleteTtd($user): void
+    {
+        if ($user->ttd_url && Storage::disk('public')->exists($user->ttd_url)) {
+            Storage::disk('public')->delete($user->ttd_url);
         }
     }
 }

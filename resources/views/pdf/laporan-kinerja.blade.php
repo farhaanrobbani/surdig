@@ -126,7 +126,11 @@
             </td>
             <td>
                 <div>Pegawai yang Dinilai</div>
-                <div style="height: 90px;"></div>
+                @if (! empty($userTtdPath))
+                    <div style="height: 90px; text-align: center;"><img src="{{ $userTtdPath }}" style="max-height: 80px; max-width: 170px;"></div>
+                @else
+                    <div style="height: 90px;"></div>
+                @endif
                 <div class="nama"><u>{{ $user->name }}</u><br><span class="nip">NIP. {{ $user->nip }}</span></div>
             </td>
         </tr>

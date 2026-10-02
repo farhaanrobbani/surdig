@@ -6,6 +6,8 @@ use App\Models\KuaSetting;
 use App\Models\StaffActivity;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class StaffExportTest extends TestCase
@@ -363,6 +365,95 @@ class StaffExportTest extends TestCase
         $this->assertStringNotContainsString('H. Kepala KUA', $rekap);
     }
 
+    public function test_laporan_word_embeds_user_signature_image(): void
+    {
+        Storage::fake('public');
+        $path = UploadedFile::fake()->image('ttd.png', 200, 80)->store('users/signatures', 'public');
+        $this->staff->update(['ttd_url' => $path]);
+
+        $response = $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.laporan', [
+                'bulan' => 8,
+                'tahun' => 2026,
+                'format' => 'word',
+            ]));
+
+        $this->assertTrue($this->wordHasMedia($response));
+    }
+
+    public function test_laporan_word_has_no_media_without_signature(): void
+    {
+        $response = $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.laporan', [
+                'bulan' => 8,
+                'tahun' => 2026,
+                'format' => 'word',
+            ]));
+
+        $this->assertFalse($this->wordHasMedia($response));
+    }
+
+    public function test_rekap_word_embeds_user_signature_image(): void
+    {
+        Storage::fake('public');
+        $path = UploadedFile::fake()->image('ttd.png', 200, 80)->store('users/signatures', 'public');
+        $this->staff->update(['ttd_url' => $path]);
+
+        $response = $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.rekap', [
+                'bulan' => 8,
+                'tahun' => 2026,
+                'total_hari_kerja' => 22,
+                'format' => 'word',
+            ]));
+
+        $this->assertTrue($this->wordHasMedia($response));
+    }
+
+    public function test_pdf_templates_render_user_signature(): void
+    {
+        Storage::fake('public');
+        $path = UploadedFile::fake()->image('ttd.png', 200, 80)->store('users/signatures', 'public');
+        $ttdPath = Storage::disk('public')->path($path);
+
+        $laporan = view('pdf.laporan-kinerja', [
+            'user' => $this->staff,
+            'activities' => collect(),
+            'pejabatPenilai' => ['nama' => 'H. Kepala KUA', 'nip' => '197001011990011001'],
+            'kop_anchor' => '1',
+            'printDate' => '31 Agustus 2026',
+            'userTtdPath' => $ttdPath,
+        ])->render();
+
+        $this->assertStringContainsString('max-height: 80px', $laporan);
+        $this->assertStringContainsString('<img src="'.$ttdPath.'"', $laporan);
+
+        $rekap = view('pdf.rekap-laporan-kinerja', [
+            'user' => $this->staff,
+            'monthName' => 'Agustus',
+            'year' => 2026,
+            'instansi' => 'KUA Ampelgading',
+            'totalHariKerja' => 22,
+            'signatureDate' => '31 Agustus 2026',
+            'pejabatPenilai' => ['nama' => 'H. Kepala KUA', 'nip' => '197001011990011001'],
+            'kepalaJabatan' => 'Kepala KUA Ampelgading',
+            'kop_anchor' => '1',
+            'userTtdPath' => $ttdPath,
+        ])->render();
+
+        $this->assertStringContainsString('max-height: 68px', $rekap);
+
+        $laporanNoTtd = view('pdf.laporan-kinerja', [
+            'user' => $this->staff,
+            'activities' => collect(),
+            'pejabatPenilai' => ['nama' => 'H. Kepala KUA', 'nip' => '197001011990011001'],
+            'kop_anchor' => '1',
+            'printDate' => '31 Agustus 2026',
+        ])->render();
+
+        $this->assertStringNotContainsString('<img', $laporanNoTtd);
+    }
+
     private function laporanWordDocument(array $extra, ?User $as = null): string
     {
         $response = $this->actingAs($as ?? $this->staff)->get(route('kegiatan.export.laporan', array_merge([
@@ -404,5 +495,31 @@ class StaffExportTest extends TestCase
         $this->assertIsString($xml);
 
         return $xml;
+    }
+
+    private function wordHasMedia($response): bool
+    {
+        $response->assertOk();
+
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $tmp = tempnam(sys_get_temp_dir(), 'lapkin');
+        file_put_contents($tmp, $content);
+
+        $zip = new \ZipArchive;
+        $zip->open($tmp);
+        $found = false;
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            if (str_starts_with($zip->statIndex($i)['name'], 'word/media/')) {
+                $found = true;
+                break;
+            }
+        }
+        $zip->close();
+        unlink($tmp);
+
+        return $found;
     }
 }
