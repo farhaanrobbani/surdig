@@ -119,6 +119,28 @@ class LapkinTest extends TestCase
         $this->assertDatabaseCount('staff_activities', 2);
     }
 
+    public function test_staff_can_store_more_than_fifty_activities_in_one_request(): void
+    {
+        $items = [];
+        for ($i = 1; $i <= 60; $i++) {
+            $items[] = [
+                'tanggal' => sprintf('2026-08-%02d', (($i - 1) % 28) + 1),
+                'kegiatan' => "Kegiatan massal {$i}",
+                'pekerjaan' => "Pekerjaan massal {$i}",
+                'activity_type_key' => '',
+                'total_jumlah' => 1,
+            ];
+        }
+
+        $this->actingAs($this->staff)
+            ->post(route('kegiatan.store'), ['items' => $items])
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseCount('staff_activities', 60);
+        $this->assertDatabaseHas('staff_activities', ['kegiatan' => 'Kegiatan massal 60']);
+    }
+
     public function test_activity_total_auto_synced_from_kua_daily_data(): void
     {
         KuaDailyData::create([

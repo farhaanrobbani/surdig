@@ -10,6 +10,7 @@ use App\Models\UserActivityTemplate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -66,7 +67,7 @@ class StaffActivityController extends Controller
     public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
-            'items' => ['required', 'array', 'min:1', 'max:50'],
+            'items' => ['required', 'array', 'min:1'],
             'items.*.tanggal' => ['required', 'date'],
             'items.*.kegiatan' => ['required', 'string', 'max:1000'],
             'items.*.pekerjaan' => ['required', 'string', 'max:1000'],
@@ -78,25 +79,27 @@ class StaffActivityController extends Controller
         $user = $request->user();
         $count = 0;
 
-        foreach ($data['items'] as $item) {
-            StaffActivity::create([
-                'user_id' => $user->id,
-                'tanggal' => $item['tanggal'],
-                'kegiatan' => $item['kegiatan'],
-                'pekerjaan' => $item['pekerjaan'],
-                'activity_type_key' => $item['activity_type_key'] ?: null,
-                'total_jumlah' => $this->resolveTotal($item),
-            ]);
+        DB::transaction(function () use ($data, $user, &$count) {
+            foreach ($data['items'] as $item) {
+                StaffActivity::create([
+                    'user_id' => $user->id,
+                    'tanggal' => $item['tanggal'],
+                    'kegiatan' => $item['kegiatan'],
+                    'pekerjaan' => $item['pekerjaan'],
+                    'activity_type_key' => $item['activity_type_key'] ?: null,
+                    'total_jumlah' => $this->resolveTotal($item),
+                ]);
 
-            if (! empty($item['save_template']) && ! empty($item['activity_type_key'])) {
-                $user->activityTemplates()->updateOrCreate(
-                    ['activity_type_key' => $item['activity_type_key']],
-                    ['kegiatan' => $item['kegiatan'], 'pekerjaan' => $item['pekerjaan']]
-                );
+                if (! empty($item['save_template']) && ! empty($item['activity_type_key'])) {
+                    $user->activityTemplates()->updateOrCreate(
+                        ['activity_type_key' => $item['activity_type_key']],
+                        ['kegiatan' => $item['kegiatan'], 'pekerjaan' => $item['pekerjaan']]
+                    );
+                }
+
+                $count++;
             }
-
-            $count++;
-        }
+        });
 
         $message = "{$count} kegiatan berhasil ditambahkan ke laporan.";
 
