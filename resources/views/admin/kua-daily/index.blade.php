@@ -59,7 +59,11 @@
                         @forelse ($data as $item)
                             <tr>
                                 <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-gray-100">
-                                    {{ tanggal_indonesia($item->tanggal, 'd F Y') }}
+                                    <a href="{{ route('kua-daily.edit', $item) }}"
+                                       title="Klik untuk edit"
+                                       class="hover:text-teal-700 hover:underline cursor-pointer dark:hover:text-teal-400">
+                                        {{ tanggal_indonesia($item->tanggal, 'd F Y') }}
+                                    </a>
                                 </td>
                                 @foreach ($columns as $key => $label)
                                     <td class="px-3 py-3 text-sm text-gray-700 text-right dark:text-gray-300">{{ $item->value($key) ?? 0 }}</td>

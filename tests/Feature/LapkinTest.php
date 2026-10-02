@@ -53,6 +53,20 @@ class LapkinTest extends TestCase
             ->assertOk();
     }
 
+    public function test_master_data_harian_date_cell_links_to_edit(): void
+    {
+        $record = KuaDailyData::create([
+            'tanggal' => '2026-08-03',
+            'data' => ['pendaftaran_nikah_kantor' => 5],
+            'created_by' => $this->operator->id,
+        ]);
+
+        $this->actingAs($this->operator)
+            ->get(route('kua-daily.index', ['bulan' => 8, 'tahun' => 2026]))
+            ->assertOk()
+            ->assertSee(route('kua-daily.edit', $record), false);
+    }
+
     public function test_staff_cannot_store_kua_daily_data(): void
     {
         $this->actingAs($this->staff)
