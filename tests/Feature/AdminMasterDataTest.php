@@ -294,6 +294,107 @@ class AdminMasterDataTest extends TestCase
             ->assertSee('Clone Jenis Surat: Surat Asli Clone');
     }
 
+    public function test_letter_type_store_without_kop_field_defaults_to_kop_enabled(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+
+        $this->actingAs($operator)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKKOP',
+                'name' => 'Surat Kop Default',
+                'permohonan_judul' => 'Surat Keterangan',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertTrue(LetterType::where('code', 'SKKOP')->firstOrFail()->kop_enabled);
+    }
+
+    public function test_letter_type_store_can_disable_kop(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+
+        $this->actingAs($operator)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKNOKOP',
+                'name' => 'Surat Tanpa Kop',
+                'permohonan_judul' => 'Surat Keterangan',
+                'kop_enabled' => '0',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertFalse(LetterType::where('code', 'SKNOKOP')->firstOrFail()->kop_enabled);
+    }
+
+    public function test_letter_type_update_toggles_kop_and_preserves_when_field_absent(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $type = LetterType::factory()->create(['kop_enabled' => true]);
+
+        $this->actingAs($operator)
+            ->put(route('letter-types.update', $type), [
+                'code' => $type->code,
+                'name' => $type->name,
+                'permohonan_judul' => 'Surat Keterangan',
+                'kop_enabled' => '0',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertFalse($type->refresh()->kop_enabled);
+
+        $this->actingAs($operator)
+            ->put(route('letter-types.update', $type), [
+                'code' => $type->code,
+                'name' => $type->name,
+                'permohonan_judul' => 'Surat Keterangan',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertFalse($type->refresh()->kop_enabled);
+    }
+
+    public function test_letter_type_edit_form_shows_kop_checkbox_state(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $typeOn = LetterType::factory()->create(['kop_enabled' => true]);
+        $typeOff = LetterType::factory()->create(['kop_enabled' => false]);
+
+        $contentOn = $this->actingAs($operator)
+            ->get(route('letter-types.edit', $typeOn))
+            ->assertOk()
+            ->assertSee('Tampilkan kop surat + garis di bagian atas surat')
+            ->getContent();
+
+        $contentOff = $this->actingAs($operator)
+            ->get(route('letter-types.edit', $typeOff))
+            ->assertOk()
+            ->getContent();
+
+        preg_match('/<input type="checkbox" name="kop_enabled"[^>]*>/', $contentOn, $matchOn);
+        preg_match('/<input type="checkbox" name="kop_enabled"[^>]*>/', $contentOff, $matchOff);
+
+        $this->assertNotEmpty($matchOn, 'Checkbox kop tidak ditemukan di form edit (kop aktif).');
+        $this->assertNotEmpty($matchOff, 'Checkbox kop tidak ditemukan di form edit (kop nonaktif).');
+        $this->assertStringContainsString('checked', $matchOn[0]);
+        $this->assertStringNotContainsString('checked', $matchOff[0]);
+
+        $this->actingAs($operator)
+            ->get(route('letter-types.create'))
+            ->assertOk()
+            ->assertSee('name="kop_enabled"', false);
+    }
+
     public function test_letter_type_edit_form_shows_permohonan_body_textarea(): void
     {
         $type = LetterType::factory()->create(['permohonan_body' => 'Narasi contoh.']);

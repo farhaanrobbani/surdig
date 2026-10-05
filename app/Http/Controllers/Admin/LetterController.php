@@ -246,6 +246,7 @@ class LetterController extends Controller
             'letter' => $letter,
             'settings' => $settings,
             'body' => PdfSupport::resolveLocalImages($letter->renderBody()),
+            'kopEnabled' => $letter->letterType?->kop_enabled ?? true,
             'kopLines' => PdfSupport::parseKopTeks($settings['kop_teks']),
             'kopFooter' => $letter->letterType?->kop_footer ?? null,
             'kopFooterEnabled' => $letter->letterType?->kop_footer_enabled ?? false,

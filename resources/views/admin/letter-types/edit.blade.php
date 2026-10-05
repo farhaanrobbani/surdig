@@ -163,6 +163,17 @@
                         </label>
                     </div>
 
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-2">Kop Surat</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">Saat kop dinonaktifkan, PDF surat diawali judul tengah dari nama template aktif tanpa garis kop.</p>
+                    <label class="flex items-center">
+                        <input type="hidden" name="kop_enabled" value="0">
+                        <input type="checkbox" name="kop_enabled" value="1"
+                               @checked((bool) old('kop_enabled', $letterType->kop_enabled))
+                               class="rounded border-gray-300 text-teal-600 focus:ring-teal-500" />
+                        <span class="ms-2 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Tampilkan kop surat + garis di bagian atas surat</span>
+                    </label>
+                    <x-input-error :messages="$errors->get('kop_enabled')" class="mt-2" />
+
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-2">Footer Surat</h3>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">Teks footer tampil di bagian paling bawah halaman PDF surat jenis ini dan bisa berbeda antar jenis surat.</p>
                     <div class="grid grid-cols-1 gap-4">

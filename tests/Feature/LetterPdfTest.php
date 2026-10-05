@@ -226,7 +226,35 @@ class LetterPdfTest extends TestCase
             ->assertSee(route('letters.preview', $draft), false);
     }
 
-    private function renderPdfHtml(): string
+    public function test_pdf_omits_kop_when_disabled(): void
+    {
+        $html = $this->renderPdfHtml(['kopEnabled' => false]);
+
+        $this->assertStringNotContainsString('<hr class="garis-tebal">', $html);
+        $this->assertStringNotContainsString('<hr class="garis-tipis">', $html);
+        $this->assertStringNotContainsString('<div class="kop">', $html);
+        $this->assertStringNotContainsString('<table class="kop-dengan-logo">', $html);
+    }
+
+    public function test_pdf_includes_kop_by_default(): void
+    {
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringContainsString('<hr class="garis-tebal">', $html);
+        $this->assertStringContainsString('<div class="kop">', $html);
+    }
+
+    public function test_pdf_download_succeeds_with_kop_disabled(): void
+    {
+        $this->type->update(['kop_enabled' => false]);
+
+        $this->actingAs($this->user)
+            ->get(route('letters.pdf', $this->letter))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+    }
+
+    private function renderPdfHtml(array $extra = []): string
     {
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
             'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'kop_anchor', 'logo_path',
@@ -236,7 +264,7 @@ class LetterPdfTest extends TestCase
             $settings[$key] = KuaSetting::get($key) ?? '';
         }
 
-        return view('pdf.letter', [
+        return view('pdf.letter', array_merge([
             'letter' => $this->letter,
             'settings' => $settings,
             'body' => $this->letter->renderBody(),
@@ -247,7 +275,7 @@ class LetterPdfTest extends TestCase
                 'sub2' => 11.5,
                 'baris' => 10.5,
             ],
-        ])->render();
+        ], $extra))->render();
     }
 
     public function test_render_body_replaces_placeholders_and_escapes_html(): void

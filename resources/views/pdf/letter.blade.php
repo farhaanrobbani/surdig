@@ -42,7 +42,8 @@
     @php($hasLogo = ! empty($selectedLogo) && \Illuminate\Support\Facades\Storage::disk('public')->exists($selectedLogo))
     @php($hasKopTeks = ! empty($kopLines))
 
-    @if ($hasLogo || $hasKopTeks)
+    @if (! ($kopEnabled ?? true))
+    @elseif ($hasLogo || $hasKopTeks)
         <table class="kop-dengan-logo">
             <tr>
                 @if ($hasLogo)
@@ -119,7 +120,7 @@
         </div>
     </div>
 
-    @if ($kopFooterEnabled && ! empty($kopFooter))
+    @if (($kopFooterEnabled ?? false) && ! empty($kopFooter))
         <div class="footer-surat">{{ $kopFooter }}</div>
     @endif
 </body>
