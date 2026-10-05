@@ -1,11 +1,11 @@
 <x-app-layout>
+    @php($source = $source ?? null)
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
             {{ $source ? 'Clone Jenis Surat: '.$source->name : 'Tambah Jenis Surat' }}
         </h2>
     </x-slot>
-
-    @php($source = $source ?? null)
 
     @push('editor')
         @vite(['resources/js/editor.js'])

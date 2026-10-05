@@ -272,6 +272,28 @@ class AdminMasterDataTest extends TestCase
             ->assertSee('Field yang Tampil di Surat Permohonan');
     }
 
+    public function test_letter_type_create_page_renders_without_source(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+
+        $this->actingAs($operator)
+            ->get(route('letter-types.create'))
+            ->assertOk()
+            ->assertSee('Tambah Jenis Surat')
+            ->assertDontSee('Clone Jenis Surat:');
+    }
+
+    public function test_letter_type_clone_page_renders_with_source(): void
+    {
+        $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $type = LetterType::factory()->create(['name' => 'Surat Asli Clone']);
+
+        $this->actingAs($operator)
+            ->get(route('letter-types.clone', $type))
+            ->assertOk()
+            ->assertSee('Clone Jenis Surat: Surat Asli Clone');
+    }
+
     public function test_letter_type_edit_form_shows_permohonan_body_textarea(): void
     {
         $type = LetterType::factory()->create(['permohonan_body' => 'Narasi contoh.']);
