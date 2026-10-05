@@ -21,6 +21,7 @@
         .kop-dengan-logo .teks { text-align: center; padding-left: 6px; }
         .garis-tebal { border: none; border-top: 3px solid #111; margin: 4px 0 0 0; }
         .garis-tipis { border: none; border-top: 1.5px solid #111; margin: 1px 0 0 0; }
+        .judul-tanpa-kop { text-align: center; font-weight: bold; font-size: 14px; line-height: 1.4; margin: 0 0 24px 0; }
 
         .header { margin: 18px 0; line-height: 1; }
         .header p { margin: 0 0 12px 0; }
@@ -43,6 +44,14 @@
     @php($hasKopTeks = ! empty($kopLines))
 
     @if (! ($kopEnabled ?? true))
+        @php($kopJudul = trim((string) ($letter->activeTemplate()?->name ?? '')))
+        @if ($kopJudul === '')
+            @php($kopJudul = trim((string) ($letter->letterType?->name ?? '')))
+        @endif
+        @php($kopJudul = preg_replace('/^template\s+/i', '', $kopJudul))
+        @if ($kopJudul !== '')
+            <div class="judul-tanpa-kop">{{ $kopJudul }}</div>
+        @endif
     @elseif ($hasLogo || $hasKopTeks)
         <table class="kop-dengan-logo">
             <tr>

@@ -254,6 +254,34 @@ class LetterPdfTest extends TestCase
             ->assertHeader('content-type', 'application/pdf');
     }
 
+    public function test_pdf_shows_template_title_when_kop_disabled(): void
+    {
+        $this->letter->activeTemplate()->update(['name' => 'Template Surat Keterangan Umum']);
+
+        $html = $this->renderPdfHtml(['kopEnabled' => false]);
+
+        $this->assertStringContainsString('<div class="judul-tanpa-kop">Surat Keterangan Umum</div>', $html);
+    }
+
+    public function test_pdf_hides_template_title_when_kop_enabled(): void
+    {
+        $this->letter->activeTemplate()->update(['name' => 'Template Surat Keterangan Umum']);
+
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringNotContainsString('<div class="judul-tanpa-kop">', $html);
+    }
+
+    public function test_pdf_title_falls_back_to_letter_type_name_without_template(): void
+    {
+        $this->type->update(['name' => 'Surat Keterangan Domisili']);
+        LetterTemplate::where('letter_type_id', $this->type->id)->update(['active' => false]);
+
+        $html = $this->renderPdfHtml(['kopEnabled' => false]);
+
+        $this->assertStringContainsString('<div class="judul-tanpa-kop">Surat Keterangan Domisili</div>', $html);
+    }
+
     private function renderPdfHtml(array $extra = []): string
     {
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
