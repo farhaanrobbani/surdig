@@ -187,6 +187,25 @@ class LetterPdfTest extends TestCase
         $this->assertStringContainsString('05 Agustus 2026', $html);
     }
 
+    public function test_pdf_shows_signature_date_by_default(): void
+    {
+        $this->letter->update(['tanggal_surat' => '2026-08-05']);
+
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringContainsString('<div class="kota">Bogor, 05 Agustus 2026</div>', $html);
+    }
+
+    public function test_pdf_hides_signature_date_when_disabled(): void
+    {
+        $this->letter->update(['tanggal_surat' => '2026-08-05', 'tampilkan_tanggal_ttd' => false]);
+
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringNotContainsString('<div class="kota">', $html);
+        $this->assertStringNotContainsString('Bogor, 05 Agustus 2026', $html);
+    }
+
     public function test_preview_available_for_draft_letter(): void
     {
         $draft = Letter::create([

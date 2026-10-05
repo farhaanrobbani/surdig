@@ -16,6 +16,7 @@ use App\Support\HtmlSanitizer;
     'perihal',
     'header_html',
     'tampilkan_tanggal',
+    'tampilkan_tanggal_ttd',
     'data',
     'status',
     'created_by',
@@ -130,6 +131,7 @@ class Letter extends Model
             'data' => 'array',
             'tanggal_surat' => 'date',
             'tampilkan_tanggal' => 'boolean',
+            'tampilkan_tanggal_ttd' => 'boolean',
             'approved_at' => 'datetime',
         ];
     }

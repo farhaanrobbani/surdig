@@ -68,6 +68,12 @@
                                            {{ old('tampilkan_tanggal', true) ? 'checked' : '' }} class="rounded border-gray-300">
                                     Tampilkan tanggal di baris atas
                                 </label>
+                                <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
+                                    <input type="hidden" name="tampilkan_tanggal_ttd" value="0">
+                                    <input type="checkbox" name="tampilkan_tanggal_ttd" value="1"
+                                           {{ old('tampilkan_tanggal_ttd', true) ? 'checked' : '' }} class="rounded border-gray-300">
+                                    Tampilkan tanggal di blok tanda tangan
+                                </label>
                             </div>
 
                             <div class="mt-6">

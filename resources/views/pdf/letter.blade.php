@@ -123,7 +123,9 @@
 
     <div class="ttd">
         <div class="blok">
-            <div class="kota">{{ Str::title($settings['kecamatan']) }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
+            @if ($letter->tampilkan_tanggal_ttd ?? true)
+                <div class="kota">{{ Str::title($settings['kecamatan']) }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
+            @endif
             <div>Kepala,</div>
             @if (($settings['kop_anchor'] ?? '1') !== '0')
                 <div class="anchor">^</div>

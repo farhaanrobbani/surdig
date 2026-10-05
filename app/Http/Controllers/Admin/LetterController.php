@@ -87,6 +87,7 @@ class LetterController extends Controller
             'perihal' => $validated['perihal'],
             'header_html' => $validated['header_html'],
             'tampilkan_tanggal' => $validated['tampilkan_tanggal'],
+            'tampilkan_tanggal_ttd' => $validated['tampilkan_tanggal_ttd'] ?? true,
             'data' => $validated['data'],
             'status' => Letter::STATUS_DRAFT,
             'created_by' => auth()->id(),
@@ -134,6 +135,7 @@ class LetterController extends Controller
             'perihal' => $validated['perihal'],
             'header_html' => $validated['header_html'],
             'tampilkan_tanggal' => $validated['tampilkan_tanggal'],
+            'tampilkan_tanggal_ttd' => $validated['tampilkan_tanggal_ttd'] ?? $letter->tampilkan_tanggal_ttd,
             'data' => $validated['data'],
         ]);
 
@@ -271,6 +273,7 @@ class LetterController extends Controller
             'perihal' => ['required', 'string', 'max:255'],
             'header_html' => ['nullable', 'string', 'max:65535'],
             'tampilkan_tanggal' => ['boolean'],
+            'tampilkan_tanggal_ttd' => ['sometimes', 'boolean'],
         ];
 
         $fields = $letterType->fields ?? [];
@@ -291,7 +294,7 @@ class LetterController extends Controller
             $safeData[$field['name']] = $data[$field['name']] ?? null;
         }
 
-        return [
+        $result = [
             'nomor' => $validated['nomor'] ?? null,
             'tanggal_surat' => $validated['tanggal_surat'] ?? null,
             'perihal' => $validated['perihal'],
@@ -299,5 +302,11 @@ class LetterController extends Controller
             'tampilkan_tanggal' => $request->boolean('tampilkan_tanggal'),
             'data' => $safeData,
         ];
+
+        if ($request->has('tampilkan_tanggal_ttd')) {
+            $result['tampilkan_tanggal_ttd'] = $request->boolean('tampilkan_tanggal_ttd');
+        }
+
+        return $result;
     }
 }

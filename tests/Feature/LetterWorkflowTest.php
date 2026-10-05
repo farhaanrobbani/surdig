@@ -55,6 +55,44 @@ class LetterWorkflowTest extends TestCase
         $this->assertDatabaseHas('letters', ['perihal' => 'Permohonan SK', 'status' => 'draft']);
     }
 
+    public function test_letter_store_defaults_signature_date_visible(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('letters.store'), [
+                'jenis' => 'SKU',
+                'perihal' => 'Tanpa Field Tanggal TTD',
+                'data' => ['nama' => 'Budi', 'alamat' => 'Jl. Merdeka'],
+            ])
+            ->assertRedirect();
+
+        $letter = Letter::where('perihal', 'Tanpa Field Tanggal TTD')->firstOrFail();
+        $this->assertTrue($letter->tampilkan_tanggal_ttd);
+    }
+
+    public function test_letter_store_can_hide_signature_date(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('letters.store'), [
+                'jenis' => 'SKU',
+                'perihal' => 'Sembunyikan Tanggal TTD',
+                'tampilkan_tanggal_ttd' => '0',
+                'data' => ['nama' => 'Budi', 'alamat' => 'Jl. Merdeka'],
+            ])
+            ->assertRedirect();
+
+        $letter = Letter::where('perihal', 'Sembunyikan Tanggal TTD')->firstOrFail();
+        $this->assertFalse($letter->tampilkan_tanggal_ttd);
+
+        $this->actingAs($this->staff)
+            ->put(route('letters.update', $letter), [
+                'perihal' => $letter->perihal,
+                'data' => $letter->data,
+            ])
+            ->assertRedirect();
+
+        $this->assertFalse($letter->refresh()->tampilkan_tanggal_ttd);
+    }
+
     public function test_staff_can_create_letter_draft_with_manual_number(): void
     {
         $this->actingAs($this->staff)
