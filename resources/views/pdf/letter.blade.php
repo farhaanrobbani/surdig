@@ -26,6 +26,9 @@
         .header { margin: 18px 0; line-height: 1; }
         .header p { margin: 0 0 12px 0; }
         .header p:last-child { margin: 0; }
+        .header-sejajar { width: 100%; border-collapse: collapse; margin: 18px 0; }
+        .header-sejajar td { vertical-align: top; padding: 0; }
+        .header-sejajar .tanggal-atas { text-align: right; white-space: nowrap; line-height: 1; padding-left: 12px; }
         .isi { text-align: justify; line-height: 1.5; }
         .isi p { margin: 0 0 12px 0; line-height: 1.5; }
         .isi table { line-height: 1.5; }
@@ -101,12 +104,17 @@
     <hr class="garis-tipis">
     @endif
 
-    <div class="header">
-        {!! $letter->renderHeader() !!}
-    </div>
-
     @if ($letter->tampilkan_tanggal)
-        <div style="text-align: right;">{{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
+        <table class="header-sejajar">
+            <tr>
+                <td class="header">{!! $letter->renderHeader() !!}</td>
+                <td class="tanggal-atas">{{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</td>
+            </tr>
+        </table>
+    @else
+        <div class="header">
+            {!! $letter->renderHeader() !!}
+        </div>
     @endif
 
     <div class="isi">

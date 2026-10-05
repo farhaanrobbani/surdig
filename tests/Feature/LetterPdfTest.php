@@ -172,7 +172,8 @@ class LetterPdfTest extends TestCase
 
         $html = $this->renderPdfHtml();
 
-        $this->assertStringContainsString('<div style="text-align: right;">05 Agustus 2026</div>', $html);
+        $this->assertStringContainsString('<table class="header-sejajar">', $html);
+        $this->assertStringContainsString('<td class="tanggal-atas">05 Agustus 2026</td>', $html);
     }
 
     public function test_pdf_hides_top_date_when_disabled(): void
@@ -181,6 +182,7 @@ class LetterPdfTest extends TestCase
 
         $html = $this->renderPdfHtml();
 
+        $this->assertStringNotContainsString('<table class="header-sejajar">', $html);
         $this->assertStringNotContainsString('<div style="text-align: right;">', $html);
         $this->assertStringContainsString('05 Agustus 2026', $html);
     }
