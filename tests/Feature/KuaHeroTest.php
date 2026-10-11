@@ -135,6 +135,16 @@ class KuaHeroTest extends TestCase
             ->assertSee('Ajukan permohonan surat keterangan');
     }
 
+    public function test_landing_kicker_omits_kecamatan_word(): void
+    {
+        KuaSetting::set('kecamatan', 'Ampelgading');
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Kantor Urusan Agama Ampelgading')
+            ->assertDontSee('Kantor Urusan Agama Kecamatan');
+    }
+
     public function test_staff_can_upload_background(): void
     {
         Storage::fake('public');

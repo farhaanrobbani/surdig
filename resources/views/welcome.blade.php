@@ -23,7 +23,7 @@
                 @endif
                 <div class="relative mx-auto max-w-5xl px-6 pb-16 pt-16 text-center sm:pt-20">
                     <p class="text-sm font-medium uppercase tracking-widest {{ $hasBg ? 'text-teal-100' : 'text-teal-700' }}">
-                        {{ $kua['kecamatan'] ? 'Kantor Urusan Agama Kecamatan '.$kua['kecamatan'] : 'Kantor Urusan Agama' }}
+                        {{ $kua['kecamatan'] ? 'Kantor Urusan Agama '.$kua['kecamatan'] : 'Kantor Urusan Agama' }}
                     </p>
                     <h1 class="mx-auto mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl {{ $hasBg ? 'text-white' : '' }}">
                         {!! ! empty($kua['hero_judul']) ? nl2br(e($kua['hero_judul'])) : 'Layanan Surat Digital<br>Tanpa Antre, Kapan Saja' !!}
